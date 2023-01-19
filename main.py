@@ -126,9 +126,5 @@ for _, angle, dist in zip(*hough_line_peaks(h, theta, d)):
 
 plt.tight_layout()
 plt.show()
-"""
-#recup coordonnées coins
-A_lst_corner = skimage.feature.corner_peaks(A,15)
-print(A_lst_corner)
-"""
+
 
