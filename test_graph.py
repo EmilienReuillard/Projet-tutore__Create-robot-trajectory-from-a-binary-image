@@ -14,6 +14,7 @@ from matplotlib import cm
 import scipy
 from math import*
 
+
 #%%
 #ouverture de l'image
 image = io.imread("A.png")
@@ -23,9 +24,6 @@ image_blurred = skimage.filters.gaussian(image_edges,(1,1))
 #Détection des coins de l'image
 coords = corner_peaks(corner_harris(image), min_distance=5, threshold_rel=0.02)
 coords_subpix = corner_subpix(image, coords, window_size=13)
-
-# N_corner = len(coords)  #Nombre de "pics"
-# print(f"N_corner = {N_corner}")
 
 #%% 
 #Création des graphes et de leurs interconnection
@@ -72,15 +70,40 @@ def Tri_coord(coords,image_blurred):
     lst_joints = []
     
     #On test toutes les connections possibles et on les mets dans lst_joints
-    for i in lst_pts:
-        for j in lst_pts:
-            var = np.zeros(2,int)
-            if(i != j):
-                if(connect2points(coords[i],coords[j],image_blurred) == True ):
-                    var[0] = i
-                    var[1] = j
-                    lst_joints.append(var)
+    
+    lock_first_pts = 0  #Vérouillage pour la première détection
+    
+    #test d'une première connexion evec les 2 premier points. On prendra le point 2 comme base pour la suite
+    if(lock_first_pts == 0):
+        for i in lst_pts:
+            for j in lst_pts:
+                if (i != j):
+                    if( connect2points(coords[i],coords[j],image_blurred) == True):
+                        lock_first_pts = 1
+                        lst_joints.append(coords[i])
+                        lst_joints.append(coords[j])
+                        del lst_pts[i]
+                        del lst_pts[j]
+                        break
+                        
+    #Maintenant, on va faire un graphe logique de point à point
+    
+    compt = 1   #compteur qui commence à 1, car on commence à partir du second point
+    stop_compt = 0
+    while len(lst_pts) > 0:    
+        for i in lst_pts:
+            if( connect2points(lst_joints[compt],coords[i],image_blurred) == True):
+                lst_joints.append(coords[i])
+                del lst_pts[i]
+                compt += 1
+                break
                     
+        stop_compt += 1
+        if stop_compt>10000:
+            print("Point seul, graphe incomplet")
+            break
+        
+        
     
 
 #%%
