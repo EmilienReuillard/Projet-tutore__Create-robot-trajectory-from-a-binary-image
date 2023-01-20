@@ -19,6 +19,7 @@ class graph:
 #_______VARIABLES_______   
     coords_peaks = []
     lst_connections = []
+    ensembles = []
     N_peaks = 0
     
 #______FONCTIONS_____
@@ -66,10 +67,13 @@ class graph:
     #fonction qui liste les connexions de chaque point
     def mapping_connexions(self):
         for i in range(self.N_peaks):
+            self.lst_connections.append([])
             for j in range(self.N_peaks):
                 if i != j:
                     if self.connect2points(i,j) == True:
-                        self.lst_connections.append([])
-                        self.lst_connections[i].append(i)
+                        
                         self.lst_connections[i].append(j)
 
+    def ensembles(self):
+        lst_point = range(self.N_peaks)
+        
