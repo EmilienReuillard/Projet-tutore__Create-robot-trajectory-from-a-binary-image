@@ -12,6 +12,9 @@ graph1.connect2points(6,9) #ça fonctionne
 graph1.mapping_connexions()
 print(graph1.lst_connections)
 
+graph1.ensembles()
+print(graph1.lst_ensembles)
+
 #%%
 
         
