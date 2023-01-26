@@ -41,6 +41,8 @@ class graph:
     lst_connections = []
     lst_ensembles = []
     N_ensembles = 0
+    trajectory_pts = [[],[],[]]
+    trajectory_pts_reel = [[],[],[]] #coordonnées réelles à parir d'un facteur d'échelle
     
 #______FONCTIONS_____
 
@@ -131,4 +133,74 @@ class graph:
                                 var.append(first_point)
                                 var.append(next_point)
                                 break
+    
+    #fait des points de trajectoire à partir des résultats trouvés par la fonction précédente
+    def trajectory_points(self,pas):
+        
+        for i in range(len(self.lst_ensembles)):
+            for j in range(len(self.lst_ensembles[i])):
+                
+                if j < len(self.lst_ensembles[i])-1:
+                    n0 = self.lst_ensembles[i][j] #On récupère le n° du point que l'on veut utiliser
+                    n1 = self.lst_ensembles[i][j+1]
+                    #print(f"n0 = {n0}")
+                    #print(f"n1 = {n1}")
+                else:
+                    n0 = self.lst_ensembles[i][j] #On récupère le n° du point que l'on veut utiliser
+                    n1 = self.lst_ensembles[i][0]
+                    
+                x0 = self.coords_peaks[n0][0]
+                y0 = self.coords_peaks[n0][1]
+                
+                x1 = self.coords_peaks[n1][0]
+                y1 = self.coords_peaks[n1][1]
+                
+                L = sqrt((x1-x0)**2+(y1-y0)**2)
+                
+                for k in range(int(L//pas)):
+                    
+                    xk = x0 + k*pas*((x1-x0)/L)
+                    yk = y0 + k*pas*((y1-y0)/L)
+                    #print(f"x{i}{k} = {xk} ; y{i}{k} = {yk}")
+                    
+                    self.trajectory_pts[0].append(xk)   #x
+                    self.trajectory_pts[1].append(yk)   #y
+                    self.trajectory_pts[2].append(0)    #z || 0 position basse
             
+            
+            if i < len(self.lst_ensembles)-1:
+                #lorque l'on passe d'un enseble à un autre il faut aussi créer le chemin avec z=1
+                n0 = self.lst_ensembles[i][0] #On récupère le n° du point que l'on veut utiliser ici le premier
+                n1 = self.lst_ensembles[i+1][0]
+                
+                print(f"n0 = {n0} ; n1 = {n1}")
+                
+                x0 = self.coords_peaks[n0][0]
+                y0 = self.coords_peaks[n0][1]
+                
+                x1 = self.coords_peaks[n1][0]
+                y1 = self.coords_peaks[n1][1]
+                
+                print(f"x0 = {x0} ; y0 = {y0}")
+                print(f"x1 = {x1} ; y1 = {y1}")
+                
+                L = sqrt((x1-x0)**2+(y1-y0)**2)
+                
+                for k in range(int(L//pas)):
+                    
+                    xk = x0 + k*pas*((x1-x0)/L)
+                    yk = y0 + k*pas*((y1-y0)/L)
+                    #print(f"x{i}{k} = {xk} ; y{i}{k} = {yk}")
+                    
+                    self.trajectory_pts[0].append(xk)   #x
+                    self.trajectory_pts[1].append(yk)   #y
+                    self.trajectory_pts[2].append(1)    #z || 0 position basse
+                
+    def traj_d2r(self, fact_echelle = 10*(10**-2)):
+                
+                dim_px = fact_echelle / len(self.trajectory_pts[0])
+                print(f"dim px = {dim_px}")
+                
+                for i in range(len(self.trajectory_pts)-1):
+                    for j in range(len(self.trajectory_pts[i])):
+                        self.trajectory_pts_reel[i].append( self.trajectory_pts[i][j] * dim_px)
