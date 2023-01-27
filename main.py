@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 #déclaration de l'élément graph de la classe graph
 graph1 = graph("TE.png")
 
-#%% 
+#%% vhvghvgh
 #On test que la fonction fonctionne bien dans la classe
 #graph1.connect2points(6,9) #ça fonctionne
 
