@@ -36,10 +36,10 @@ class point:
 class graph:
     
 #_______VARIABLES_______   
-    coords_peaks = []
-    N_peaks = 0
-    lst_connections = []
-    lst_ensembles = []
+    coords_peaks = []   #coordonées des coins [x,y]
+    N_peaks = 0 #Nombre de coins dans l'image
+    lst_connections = []    #Pour chaque pic, répértorie les points connectés au n-ieme de la liste
+    lst_ensembles = []  #Répertorie les points interconnerctés
     N_ensembles = 0
     trajectory_pts = [[],[],[]]
     trajectory_pts_reel = [[],[],[]] #coordonnées réelles à parir d'un facteur d'échelle
@@ -135,7 +135,7 @@ class graph:
                                 break
     
     #fait des points de trajectoire à partir des résultats trouvés par la fonction précédente
-    def trajectory_points(self,pas):
+    def trajectory_points(self,pas=1):
         
         for i in range(len(self.lst_ensembles)):
             for j in range(len(self.lst_ensembles[i])):
@@ -199,7 +199,7 @@ class graph:
     def traj_d2r(self, fact_echelle = 10*(10**-2)):
                 
                 dim_px = fact_echelle / len(self.trajectory_pts[0])
-                print(f"dim px = {dim_px}")
+                #print(f"dim px = {dim_px}")
                 
                 for i in range(len(self.trajectory_pts)-1):
                     for j in range(len(self.trajectory_pts[i])):
