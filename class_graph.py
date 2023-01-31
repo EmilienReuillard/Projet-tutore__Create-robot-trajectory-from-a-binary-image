@@ -21,6 +21,7 @@ def appartient(lst,var):
             return True
     return False
 
+
 class graph:
     
 #_______VARIABLES_______   
