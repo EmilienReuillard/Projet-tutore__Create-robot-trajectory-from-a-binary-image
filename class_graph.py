@@ -21,17 +21,6 @@ def appartient(lst,var):
             return True
     return False
 
-class point:
-    N = 0
-    X = 0
-    Y = 0
-    lst_connection = []
-    
-    def __init__(self,n,x,y,connected_pt):
-        self.N = n
-        self.X = x
-        self.Y = y
-        self.lst_connection.append(connected_pt)
 
 class graph:
     
