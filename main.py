@@ -28,7 +28,7 @@ class PointPublisher(Node):
     def __init__(self, lst_point):
         super().__init__('point_image_publisher')
         self.publisher_ = self.create_publisher(Point, '/point_image', 1)
-        timer_period = 0.5  # seconds
+        timer_period = 0.01  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0
         self.lst_point = lst_point
