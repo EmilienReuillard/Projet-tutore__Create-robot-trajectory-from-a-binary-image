@@ -7,9 +7,9 @@ from rclpy.node import Node
 from geometry_msgs.msg import Point
 
 #%%
-#déclaration de l'élément graph de la classe graph
-graph1 = graph("TE.png")
-graph1.image2coord()
+
+
+
 
 """
 #On test la fonction mapping
@@ -45,12 +45,17 @@ class PointPublisher(Node):
 
 def main(args=None):
     
-
+    #déclaration de l'élément graph de la classe graph
+    graph1 = graph("TE.png")
+    graph1.image2coord()
+    lst = graph1.trajectory_pts_reel    #lst contient les coordonées xyz
+    
+    #initialisation du node ros
     rclpy.init(args=args)
     point_publisher = PointPublisher(lst)
     rclpy.spin(point_publisher)
     
-    
+    #publishing
     point_publisher.destroy_node()
     rclpy.shutdown()
 
