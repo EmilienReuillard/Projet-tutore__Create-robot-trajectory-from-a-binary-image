@@ -42,8 +42,9 @@ class PointPublisher(Node):
             msg.z = float(self.lst_point[2][self.i])
             print(f"x = {msg.x} ; y = {msg.y} ; z = {msg.z}")
             self.publisher_.publish(msg)
-        else:
+        elif self.i == L:
             print("End of the communication")
+        else:            
             return False
         self.i += 1
 
