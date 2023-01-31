@@ -8,9 +8,6 @@ from geometry_msgs.msg import Point
 
 #%%
 
-
-
-
 """
 #On test la fonction mapping
 #graph1.mapping_connexions()
@@ -44,8 +41,8 @@ class PointPublisher(Node):
             self.publisher_.publish(msg)
         elif self.i == L:
             print("End of the communication")
-        else:            
-            return False
+        else:
+            exit()           
         self.i += 1
 
 
@@ -65,6 +62,7 @@ def main(args=None):
     #publishing
     point_publisher.destroy_node()
     rclpy.shutdown()
+    
 
 if __name__ == '__main__':
     main()
