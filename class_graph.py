@@ -162,7 +162,7 @@ class graph:
                 n0 = self.lst_ensembles[i][0] #On récupère le n° du point que l'on veut utiliser ici le premier
                 n1 = self.lst_ensembles[i+1][0]
                 
-                print(f"n0 = {n0} ; n1 = {n1}")
+                #print(f"n0 = {n0} ; n1 = {n1}")
                 
                 x0 = self.coords_peaks[n0][0]
                 y0 = self.coords_peaks[n0][1]
@@ -170,8 +170,8 @@ class graph:
                 x1 = self.coords_peaks[n1][0]
                 y1 = self.coords_peaks[n1][1]
                 
-                print(f"x0 = {x0} ; y0 = {y0}")
-                print(f"x1 = {x1} ; y1 = {y1}")
+                #print(f"x0 = {x0} ; y0 = {y0}")
+                #print(f"x1 = {x1} ; y1 = {y1}")
                 
                 L = sqrt((x1-x0)**2+(y1-y0)**2)
                 
