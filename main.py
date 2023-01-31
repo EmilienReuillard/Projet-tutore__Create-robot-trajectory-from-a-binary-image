@@ -38,6 +38,7 @@ class PointPublisher(Node):
         msg.x = float(self.lst_point[0][self.i])
         msg.y = float(self.lst_point[1][self.i])
         msg.z = float(self.lst_point[2][self.i])
+        print(f"x = {msg.x} ; y = {msg.y} ; z = {msg.z}")
         self.publisher_.publish(msg)
         self.i += 1
 
