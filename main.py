@@ -34,12 +34,17 @@ class PointPublisher(Node):
         self.lst_point = lst_point
         
     def timer_callback(self):
-        msg = Point()
-        msg.x = float(self.lst_point[0][self.i])
-        msg.y = float(self.lst_point[1][self.i])
-        msg.z = float(self.lst_point[2][self.i])
-        print(f"x = {msg.x} ; y = {msg.y} ; z = {msg.z}")
-        self.publisher_.publish(msg)
+        L = len(self.lst_point[0])
+        if self.i < L:
+            msg = Point()
+            msg.x = float(self.lst_point[0][self.i])
+            msg.y = float(self.lst_point[1][self.i])
+            msg.z = float(self.lst_point[2][self.i])
+            print(f"x = {msg.x} ; y = {msg.y} ; z = {msg.z}")
+            self.publisher_.publish(msg)
+        else:
+            print("End of the communication")
+            return False
         self.i += 1
 
 
