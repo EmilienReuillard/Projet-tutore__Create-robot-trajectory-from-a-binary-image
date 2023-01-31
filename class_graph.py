@@ -195,8 +195,8 @@ class graph:
                         self.trajectory_pts_reel[i].append( self.trajectory_pts[i][j] * dim_px)
                         
     #regroupe toutes les fonctions précédentes     
-    def image2coord(self,pas=1):
+    def image2coord(self,pas=1 ,fact_echelle = 10*(10**-2)):
         self.mapping_connexions()
         self.ensembles()
         self.trajectory_points(pas)
-        self.traj_d2r()
+        self.traj_d2r(fact_echelle)
