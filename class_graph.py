@@ -190,7 +190,7 @@ class graph:
                 dim_px = fact_echelle / len(self.trajectory_pts[0])
                 #print(f"dim px = {dim_px}")
                 
-                for i in range(len(self.trajectory_pts)-1):
+                for i in range(len(self.trajectory_pts)):
                     for j in range(len(self.trajectory_pts[i])):
                         self.trajectory_pts_reel[i].append( self.trajectory_pts[i][j] * dim_px)
                         
