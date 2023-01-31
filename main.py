@@ -8,11 +8,9 @@ from geometry_msgs.msg import Point
 
 #%%
 #déclaration de l'élément graph de la classe graph
-#graph1 = graph("TE.png")
+graph1 = graph("TE.png")
+graph1.image2coord()
 
-#%% vhvghvgh
-#On test que la fonction fonctionne bien dans la classe
-#graph1.connect2points(6,9) #ça fonctionne
 """
 #On test la fonction mapping
 #graph1.mapping_connexions()
@@ -44,6 +42,7 @@ class PointPublisher(Node):
         self.i += 1
 
 
+
 def main(args=None):
     
 
@@ -58,16 +57,15 @@ def main(args=None):
 if __name__ == '__main__':
     main()
 
+
 """
 plt.figure(0)
 plt.plot(graph1.trajectory_pts[0],graph1.trajectory_pts[1])
 plt.show()
-"""
-"""
+
 plt.figure(1)
 plt.plot(graph1.trajectory_pts_reel[0],graph1.trajectory_pts_reel[1])
 plt.show()
-
 
 plt.figure(2)
 plt.plot(graph1.trajectory_pts[0])
