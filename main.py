@@ -8,7 +8,7 @@ graph1 = graph("TE.png")
 #%% 
 #On test que la fonction fonctionne bien dans la classe
 #graph1.connect2points(6,9) #ça fonctionne
-
+"""
 #On test la fonction mapping
 graph1.mapping_connexions()
 print("lst connections : ")
@@ -21,6 +21,8 @@ print(graph1.lst_ensembles)
 graph1.trajectory_points(1)
 
 graph1.traj_d2r()
+"""
+graph1.image2coord()
 
 """
 plt.figure(0)
