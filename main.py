@@ -30,6 +30,14 @@ class PointPublisher(Node):
         elif self.i == L:
             print("End of the communication")
         else:
+            
+            plt.figure(1)
+            plt.plot(self.lst_point[0],self.lst_point[1])
+            plt.xlabel("x")
+            plt.ylabel("y")
+            plt.title("Coord réelle")
+            plt.show()
+            
             exit()           
         self.i += 1
 
