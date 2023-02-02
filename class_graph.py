@@ -185,7 +185,7 @@ class graph:
                     self.trajectory_pts[1].append(yk)   #y
                     self.trajectory_pts[2].append(10000)    #z || 0 position basse
                 
-    def traj_d2r(self, fact_echelle = 10*(10**-2)):
+    def traj_d2r(self, fact_echelle = 10*(10**-2)): #fact_echelle == longueur en x de l'image réelle
                 
                 dim_px = fact_echelle / len(self.trajectory_pts[0])
                 #print(f"dim px = {dim_px}")
