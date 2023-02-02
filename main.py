@@ -39,21 +39,8 @@ def main(args=None):
     
     #déclaration de l'élément graph de la classe graph
     graph1 = graph("TE.png")
-    graph1.image2coord(1,1)
-    
-    plt.figure(0)
-    plt.plot(graph1.trajectory_pts[0],graph1.trajectory_pts[1])
-    plt.xlabel("x")
-    plt.ylabel("y")
-    plt.title("Coord pixels")
-    plt.show()
-    
-    plt.figure(1)
-    plt.plot(graph1.trajectory_pts_reel[0],graph1.trajectory_pts_reel[1])
-    plt.xlabel("x")
-    plt.ylabel("y")
-    plt.title("Coord réelle")
-    plt.show()
+    graph1.image2coord(1,1) 
+    graph1.affichage()
     
     lst = graph1.trajectory_pts_reel    #lst contient les coordonées xyz
     
