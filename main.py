@@ -54,7 +54,7 @@ def main(args=None):
     
     #déclaration de l'élément graph de la classe graph
     graph1 = graph("TE.png")
-    graph1.image2coord()
+    graph1.image2coord(1,1)
     lst = graph1.trajectory_pts_reel    #lst contient les coordonées xyz
     
     #initialisation du node ros
