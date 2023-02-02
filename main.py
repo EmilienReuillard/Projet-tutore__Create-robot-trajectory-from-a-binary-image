@@ -29,22 +29,7 @@ class PointPublisher(Node):
             self.publisher_.publish(msg)
         elif self.i == L:
             print("End of the communication")
-        else:
-            
-            plt.figure(0)
-            plt.plot(self.trajectory_pts[0],self.trajectory_pts[1])
-            plt.xlabel("x")
-            plt.ylabel("y")
-            plt.title("Coord pixels")
-            plt.show()
-            
-            plt.figure(1)
-            plt.plot(self.lst_point[0],self.lst_point[1])
-            plt.xlabel("x")
-            plt.ylabel("y")
-            plt.title("Coord réelle")
-            plt.show()
-            
+        else:            
             exit()           
         self.i += 1
 
@@ -55,6 +40,21 @@ def main(args=None):
     #déclaration de l'élément graph de la classe graph
     graph1 = graph("TE.png")
     graph1.image2coord(1,1)
+    
+    plt.figure(0)
+    plt.plot(graph1.trajectory_pts[0],graph1.trajectory_pts[1])
+    plt.xlabel("x")
+    plt.ylabel("y")
+    plt.title("Coord pixels")
+    plt.show()
+    
+    plt.figure(1)
+    plt.plot(graph1.trajectory_pts_reel[0],graph1.trajectory_pts_reel[1])
+    plt.xlabel("x")
+    plt.ylabel("y")
+    plt.title("Coord réelle")
+    plt.show()
+    
     lst = graph1.trajectory_pts_reel    #lst contient les coordonées xyz
     
     #initialisation du node ros
