@@ -8,18 +8,6 @@ from geometry_msgs.msg import Point
 
 #%%
 
-"""
-#On test la fonction mapping
-#graph1.mapping_connexions()
-#print("lst connections : ")
-#print(graph1.lst_connections)
-#graph1.ensembles()
-#print("lst_ensembles")
-#print(graph1.lst_ensembles)
-#graph1.trajectory_points(1)
-#graph1.traj_d2r()
-"""
-
 class PointPublisher(Node):
 
     def __init__(self, lst_point):
