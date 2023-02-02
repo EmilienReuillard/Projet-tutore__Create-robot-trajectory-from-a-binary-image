@@ -200,3 +200,28 @@ class graph:
         self.ensembles()
         self.trajectory_points(pas)
         self.traj_d2r(fact_echelle)
+        
+    #affiche les graphs utiles
+    def affichage(self):
+        plt.figure(0)
+        plt.plot(self.trajectory_pts[0],self.trajectory_pts[1])
+        plt.title("Coord pixels")
+        plt.show()
+
+        plt.figure(1)
+        plt.plot(self.trajectory_pts_reel[0],self.trajectory_pts_reel[1])
+        plt.title("Coord réelle")
+        plt.show()
+        """
+        plt.figure(2)
+        plt.plot(self.trajectory_pts[0])
+        plt.show()
+
+        plt.figure(3)
+        plt.plot(self.trajectory_pts[1])
+        plt.show()
+
+        plt.figure(4)
+        plt.plot(self.trajectory_pts[2])
+        plt.show()
+        """

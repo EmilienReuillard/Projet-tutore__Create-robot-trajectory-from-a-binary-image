@@ -68,27 +68,7 @@ if __name__ == '__main__':
     main()
 
 
-"""
-plt.figure(0)
-plt.plot(graph1.trajectory_pts[0],graph1.trajectory_pts[1])
-plt.show()
 
-plt.figure(1)
-plt.plot(graph1.trajectory_pts_reel[0],graph1.trajectory_pts_reel[1])
-plt.show()
-
-plt.figure(2)
-plt.plot(graph1.trajectory_pts[0])
-plt.show()
-
-plt.figure(3)
-plt.plot(graph1.trajectory_pts[1])
-plt.show()
-
-plt.figure(4)
-plt.plot(graph1.trajectory_pts[2])
-plt.show()
-"""
 #%%
 
         
