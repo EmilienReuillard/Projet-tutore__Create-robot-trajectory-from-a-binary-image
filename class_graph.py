@@ -198,7 +198,7 @@ class graph:
         #mettre l'origine en bas à gauche, actuellement on est en haut à gauche
         new_listx = self.trajectory_pts[1]
         new_listy = -1*self.trajectory_pts[0]
-        self.trajectory_pts = [new_listx,new_listy]
+        self.trajectory_pts = [new_listx,new_listy,self.trajectory_pts[2]]
         
         #translation du repère
         minx = min(self.trajectory_pts[0])
