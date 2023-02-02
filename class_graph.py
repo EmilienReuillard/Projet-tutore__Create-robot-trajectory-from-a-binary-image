@@ -205,11 +205,15 @@ class graph:
     def affichage(self):
         plt.figure(0)
         plt.plot(self.trajectory_pts[0],self.trajectory_pts[1])
+        plt.xlabel("x")
+        plt.ylabel("y")
         plt.title("Coord pixels")
         plt.show()
 
         plt.figure(1)
         plt.plot(self.trajectory_pts_reel[0],self.trajectory_pts_reel[1])
+        plt.xlabel("x")
+        plt.ylabel("y")
         plt.title("Coord réelle")
         plt.show()
         """
