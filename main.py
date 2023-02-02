@@ -13,7 +13,7 @@ class PointPublisher(Node):
     def __init__(self, lst_point):
         super().__init__('point_image_publisher')
         self.publisher_ = self.create_publisher(Point, '/point_image', 1)
-        timer_period = 0.001  # seconds
+        timer_period = 0.1  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0
         self.lst_point = lst_point
@@ -40,7 +40,6 @@ def main(args=None):
     #déclaration de l'élément graph de la classe graph
     graph1 = graph("TE.png")
     graph1.image2coord(1,1) 
-    graph1.affichage()
     
     lst = graph1.trajectory_pts_reel    #lst contient les coordonées xyz
     
@@ -59,7 +58,6 @@ if __name__ == '__main__':
 
 
 
-#%%
 
         
         
