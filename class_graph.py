@@ -183,22 +183,51 @@ class graph:
                     
                     self.trajectory_pts[0].append(xk)   #x
                     self.trajectory_pts[1].append(yk)   #y
-                    self.trajectory_pts[2].append(10000)    #z || 0 position basse
+                    self.trajectory_pts[2].append(1)    #z || 0 position basse
+    
+    #recaler la plus petite valeur en (0;0)
+    def recalage(self):
+        #translation du repère
+        minx = min(self.trajectory_pts[0])
+        miny = min(self.trajectory_pts[1])
+        print(f"minx = {minx} ; miny = {miny}")
+        
+        self.trajectory_pts[0] = self.trajectory_pts[0]-minx
+        self.trajectory_pts[1] = self.trajectory_pts[1]-miny
+        
+        #mettre l'origine en bas à gauche, actuellement on est en haut à gauche
+        new_listx = self.trajectory_pts[1]
+        new_listy = -1*self.trajectory_pts[0]
+        self.trajectory_pts = [new_listx,new_listy]
+        
+        #translation du repère
+        minx = min(self.trajectory_pts[0])
+        miny = min(self.trajectory_pts[1])
+        print(f"minx = {minx} ; miny = {miny}")
+        
+        self.trajectory_pts[0] = self.trajectory_pts[0]-minx
+        self.trajectory_pts[1] = self.trajectory_pts[1]-miny
+        
                 
     def traj_d2r(self, fact_echelle = 10*(10**-2)): #fact_echelle == longueur en x de l'image réelle
-                
-                dim_px = fact_echelle / len(self.trajectory_pts[0])
-                #print(f"dim px = {dim_px}")
-                
-                for i in range(len(self.trajectory_pts)):
-                    for j in range(len(self.trajectory_pts[i])):
-                        self.trajectory_pts_reel[i].append( self.trajectory_pts[i][j] * dim_px)
+        
+        L = len(self.trajectory_pts[0])
+        print(f"L = {L}")
+        
+        dim_px = fact_echelle / max(self.trajectory_pts[0])
+        print(f"self.trajectory_pts[0][L-1] = {max(self.trajectory_pts[0])}")
+        print(f"dim px = {dim_px}")
+        
+        for i in range(len(self.trajectory_pts)):
+            for j in range(len(self.trajectory_pts[i])):
+                self.trajectory_pts_reel[i].append( self.trajectory_pts[i][j] * dim_px)
                         
     #regroupe toutes les fonctions précédentes     
     def image2coord(self,pas=1 ,fact_echelle = 10*(10**-2)):
         self.mapping_connexions()
         self.ensembles()
         self.trajectory_points(pas)
+        self.recalage()
         self.traj_d2r(fact_echelle)
         
     #affiche les graphs utiles
