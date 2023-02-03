@@ -14,14 +14,6 @@ from matplotlib import cm
 import scipy
 from math import*
 
-#test une liste pour savoir si elle contiens une variable
-def appartient(lst,var):
-    for i in range(len(lst)):
-        if lst[i]==var:
-            return True
-    return False
-
-
 class graph:
     
 #_______VARIABLES_______   
