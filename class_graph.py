@@ -30,8 +30,8 @@ class graph:
     def __init__(self,path_image):
         #ouverture de l'image
         self.image = io.imread(path_image)
-        self.image_edges = canny(self.image,3)
-        self.image_blurred = skimage.filters.gaussian(self.image_edges,(1,1))
+        self.image_edges = canny(self.image,3)  #uniquement les bords de l'image
+        self.image_blurred = skimage.filters.gaussian(self.image_edges,(1,1))   #on floute l'image précédente
         
         #Détection des coins dans l'image
         self.coords_peaks = corner_peaks(corner_harris(self.image), min_distance=5, threshold_rel=0.02)
