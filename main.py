@@ -57,13 +57,17 @@ class TrajectoryPublisher(Node):
     def __init__(self,lst_point,origin):
         super().__init__('trajectory_publisher')
         self.publisher_ = self.create_publisher(JointTrajectory, '/scara_trajectory_controller/joint_trajectory', 10)
-        self.period = 0.03
+        self.period = 0.02
         self.timer_period = self.period # seconds
         self.timer = self.create_timer(self.timer_period, self.timer_callback)
         self.i = 0
         self.lst_point = lst_point
         self.origin = origin
-        
+        self.x_before = float()
+        self.y_before = float()
+        self.z_before = float()
+        self.is_downhill = bool()
+                
     def timer_callback(self):
         L = len(self.lst_point[0])
         if self.i < L:
@@ -75,21 +79,39 @@ class TrajectoryPublisher(Node):
             y = float(self.lst_point[1][self.i])
             z = float(self.lst_point[2][self.i])
             x,y = repere_change(x,y,self.origin)
+            
             x = round(x,3)
             y = round(y,3)
-            z = round(z,3)
-            
+            z = round(z,3)           
+                        
             val = coord_articulaire(x,y,coude=1)
+            
+            
+            
             if (val == False):
                 #position inateignalbe, pas dans l'espace de travails 
                 return
             alpha, beta = float(val[0]), float(val[1])
-            if (z==0.0):
+            top_position_z = 0.2
+            bottom_position_z = 0.5
+            if (z==1.0 and self.z_before!=0.0):
+                #passage de la position haute à le position basse. 
                 self.timer_period = self.period
-                z=0.5
-            else: 
-                z = 0.2
-                self.timer_period = 0.2
+                self.is_downhill = False
+                #tant que le z n'a pas atttein le sol alors les position x et y ne bougent pas.
+                z=bottom_position_z
+            elif(z!=0.0 and self.z_before==0.0):
+                #passage de la position basse à la position haute. 
+                z = top_position_z
+                self.timer_period = 0.5
+            elif(z==0.0):
+                #position basse 
+                z=bottom_position_z
+                self.timer_period = self.period
+            elif(z!=0.0):
+                #position haute
+                z=top_position_z
+                self.timer_period = 0.5
             print(f"x = {x} ; y = {y} ; z = {z}")    
                 
             point.positions = [alpha,beta,z]
@@ -97,6 +119,7 @@ class TrajectoryPublisher(Node):
             point.time_from_start.nanosec = int(self.timer_period * 1e9)
             msg.points = [point]
             self.publisher_.publish(msg)
+            self.z_before = z
         elif self.i == L:
             print("End of the communication")
         else:            
@@ -115,13 +138,13 @@ def main(args=None):
     
     #déclaration de l'élément graph de la classe graph
     graph1 = graph("TTT.png")
-    l = 0.6 #selon x
+    l = 0.7 #selon x
     graph1.image2coord(1,l)
     h = graph1.dim_reel_y #selon y
     print(h)
     
     #vérification que l'image rentre dans la zone de travails 
-    origin = [-0.3, 0.3]
+    origin = [-0.5, 0.3]
     pt_b_l = origin
     pt_b_r = [origin[0]+l,origin[1]]
     pt_t_r = [origin[0]+ l,origin[1] + h]
@@ -147,9 +170,10 @@ def main(args=None):
         point_publisher.destroy_node()
         rclpy.shutdown()
     else:
+        
         print("Error : l'image ne rentre pas dans l'espace de travails du robot")
-    
-
+        print(f"Top left : {test_t_l}; Top right : {test_t_r}; ")
+        print(f"Bottom left : {test_b_l}; Bottom right : {test_b_r}; ")
 if __name__ == '__main__':
     main()
 
