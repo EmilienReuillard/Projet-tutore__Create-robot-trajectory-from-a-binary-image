@@ -33,7 +33,7 @@ def coord_articulaire(x,y,coude=1):
 
     return [alpha, beta]
 
-def repere_change(x,y,pt_decallage = [-0.5, 0.1]):
+def repere_change(x,y,pt_decallage):
     M01 = np.array([[1,0,0,pt_decallage[0]],[0,1,0,pt_decallage[1]], [0,0,1,0], [0,0,0,1]])
     pt_homo = np.array([[x],[y],[0],[1]])
     pt_new = np.dot(M01,pt_homo)
@@ -52,7 +52,7 @@ def is_in_workspace(x,y,a1,a2,alpha_min, alpha_max, beta_min, beta_max):
 
 class TrajectoryPublisher(Node):
 
-    def __init__(self,lst_point):
+    def __init__(self,lst_point,origin):
         super().__init__('trajectory_publisher')
         self.publisher_ = self.create_publisher(JointTrajectory, '/scara_trajectory_controller/joint_trajectory', 10)
         
@@ -60,6 +60,7 @@ class TrajectoryPublisher(Node):
         self.timer = self.create_timer(self.timer_period, self.timer_callback)
         self.i = 0
         self.lst_point = lst_point
+        self.origin = origin
         
     def timer_callback(self):
         L = len(self.lst_point[0])
@@ -71,9 +72,9 @@ class TrajectoryPublisher(Node):
             x = float(self.lst_point[0][self.i])
             y = float(self.lst_point[1][self.i])
             z = float(self.lst_point[2][self.i])
-            x,y = repere_change(x,y,[-0.2, 0.4])
+            x,y = repere_change(x,y,self.origin)
             print(f"x = {x} ; y = {y} ; z = {z}")
-            val = coord_articulaire(x,y,coude =1)
+            val = coord_articulaire(x,y,coude=-1)
             if (val == False):
                 #position inateignalbe, pas dans l'espace de travails 
                 return
@@ -91,16 +92,23 @@ class TrajectoryPublisher(Node):
 
 def main(args=None):
     
-    #déggclaration de l'élément graph de la classe graph
+    #déclaration de l'élément graph de la classe graph
     graph1 = graph("TE.png")
     graph1.image2coord(1,0.4)
+    
+    #vérification que l'image rentre deq
+    
+    origin = [-0.2, 0.4]
+    #vérification que l'image rentre deq
     
     lst = graph1.trajectory_pts_reel    #lst contient les coordonées xyz
     
     #initialisation du node ros
     rclpy.init(args=args)
-    point_publisher = TrajectoryPublisher(lst)
+    point_publisher = TrajectoryPublisher(lst,origin=origin)
     rclpy.spin(point_publisher)
+    
+   
     
     #publishing
     point_publisher.destroy_node()
