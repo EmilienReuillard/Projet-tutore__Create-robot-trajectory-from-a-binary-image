@@ -213,11 +213,11 @@ class graph:
         
         Lx = len(self.trajectory_pts[0])
         Ly = len(self.trajectory_pts[1])
-        print(f"Lx = {Lx} ; Ly = {Ly}")
+        #print(f"Lx = {Lx} ; Ly = {Ly}")
         
         dim_px = fact_echelle / max(self.trajectory_pts[0])
-        print(f"self.trajectory_pts[0][L-1] = {max(self.trajectory_pts[0])}")
-        print(f"dim px = {dim_px}")
+        #print(f"self.trajectory_pts[0][L-1] = {max(self.trajectory_pts[0])}")
+        #print(f"dim px = {dim_px}")
         
         #calcul de la longeur de l'image en y
         self.dim_reel_y = dim_px*max(self.trajectory_pts[1])    #On multiplie la dimention d'un px avec la 'taille' 

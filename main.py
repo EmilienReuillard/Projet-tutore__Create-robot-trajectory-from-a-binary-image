@@ -102,7 +102,7 @@ def main(args=None):
     h = graph1.dim_reel_y #selon y
     
     #vérification que l'image rentre dans la zone de travails 
-    origin = [-0.2, 0.4]
+    origin = [-0.2, 0.6]
     test_b_l = is_in_workspace(origin[0], origin[1], a1,a2,0,0, -np.pi, np.pi)
     test_t_r = is_in_workspace(origin[0] + l, origin[1] + h, a1,a2,0,0, -np.pi, np.pi)
     print(test_b_l)
@@ -118,7 +118,6 @@ def main(args=None):
         rclpy.init(args=args)
         point_publisher = TrajectoryPublisher(lst,origin=origin)
         rclpy.spin(point_publisher)
-        
         #publishing
         point_publisher.destroy_node()
         rclpy.shutdown()
