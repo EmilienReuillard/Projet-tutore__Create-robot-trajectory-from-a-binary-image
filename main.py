@@ -94,7 +94,9 @@ def main(args=None):
     
     #déclaration de l'élément graph de la classe graph
     graph1 = graph("TE.png")
-    graph1.image2coord(1,0.4)
+    l = 0.4
+    graph1.image2coord(1,l)
+    h = graph1.dim_reel_y
     
     #vérification que l'image rentre deq
     

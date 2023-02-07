@@ -211,12 +211,16 @@ class graph:
                 
     def traj_d2r(self, fact_echelle = 10*(10**-2)): #fact_echelle == longueur en x de l'image réelle
         
-        L = len(self.trajectory_pts[0])
-        print(f"L = {L}")
+        Lx = len(self.trajectory_pts[0])
+        Ly = len(self.trajectory_pts[1])
+        print(f"Lx = {Lx} ; Ly = {Ly}")
         
         dim_px = fact_echelle / max(self.trajectory_pts[0])
         print(f"self.trajectory_pts[0][L-1] = {max(self.trajectory_pts[0])}")
         print(f"dim px = {dim_px}")
+        
+        #calcul de la longeur de l'image en y
+        self.dim_reel_y = dim_px*max(self.trajectory_pts[1])    #On multiplie la dimention d'un px avec la 'taille' 
         
         for i in range(len(self.trajectory_pts)):
             for j in range(len(self.trajectory_pts[i])):
