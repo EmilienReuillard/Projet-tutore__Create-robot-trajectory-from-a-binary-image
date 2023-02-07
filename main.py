@@ -57,8 +57,8 @@ class TrajectoryPublisher(Node):
     def __init__(self,lst_point,origin):
         super().__init__('trajectory_publisher')
         self.publisher_ = self.create_publisher(JointTrajectory, '/scara_trajectory_controller/joint_trajectory', 10)
-        
-        self.timer_period = 0.03 # seconds
+        self.period = 0.03
+        self.timer_period = self.period # seconds
         self.timer = self.create_timer(self.timer_period, self.timer_callback)
         self.i = 0
         self.lst_point = lst_point
@@ -75,12 +75,23 @@ class TrajectoryPublisher(Node):
             y = float(self.lst_point[1][self.i])
             z = float(self.lst_point[2][self.i])
             x,y = repere_change(x,y,self.origin)
-            print(f"x = {x} ; y = {y} ; z = {z}")
-            val = coord_articulaire(x,y,coude=-1)
+            x = round(x,3)
+            y = round(y,3)
+            z = round(z,3)
+            
+            val = coord_articulaire(x,y,coude=1)
             if (val == False):
                 #position inateignalbe, pas dans l'espace de travails 
                 return
             alpha, beta = float(val[0]), float(val[1])
+            if (z==0.0):
+                self.timer_period = self.period
+                z=0.5
+            else: 
+                z = 0.0
+                self.timer_period = 0.2
+            print(f"x = {x} ; y = {y} ; z = {z}")    
+                
             point.positions = [alpha,beta,z]
             point.time_from_start.sec = 0
             point.time_from_start.nanosec = int(self.timer_period * 1e9)
@@ -103,8 +114,8 @@ def main(args=None):
     beta_min = -np.pi
     
     #déclaration de l'élément graph de la classe graph
-    graph1 = graph("TEATE2.png")
-    l = 0.2 #selon x
+    graph1 = graph("TTT.png")
+    l = 0.5 #selon x
     graph1.image2coord(3,l)
     h = graph1.dim_reel_y #selon y
     print(h)
