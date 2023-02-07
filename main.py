@@ -115,8 +115,8 @@ def main(args=None):
     
     #déclaration de l'élément graph de la classe graph
     graph1 = graph("TTT.png")
-    l = 0.5 #selon x
-    graph1.image2coord(3,l)
+    l = 0.6 #selon x
+    graph1.image2coord(1,l)
     h = graph1.dim_reel_y #selon y
     print(h)
     
@@ -134,7 +134,7 @@ def main(args=None):
    
     if (test_b_l == True and test_t_r == True and test_t_l==True and test_b_r==True):
         print("Image OK")
-        graph1.affichage()
+        #graph1.affichage()
         #vérification que l'image rentre deq
         
         lst = graph1.trajectory_pts_reel    #lst contient les coordonées xyz
