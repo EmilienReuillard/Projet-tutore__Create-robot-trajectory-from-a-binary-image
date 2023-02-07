@@ -91,6 +91,9 @@ class TrajectoryPublisher(Node):
         self.i += 1
 
 def main(args=None):
+    #paramètres du robot
+    a1 = 0.425 
+    a2 = 0.345
     
     #déclaration de l'élément graph de la classe graph
     graph1 = graph("TE.png")
@@ -98,22 +101,29 @@ def main(args=None):
     graph1.image2coord(1,l)
     h = graph1.dim_reel_y #selon y
     
-    #vérification que l'image rentre deq
+    #vérification que l'image rentre dans la zone de travails 
     origin = [-0.2, 0.4]
-    #vérification que l'image rentre deq
+    test_b_l = is_in_workspace(origin[0], origin[1], a1,a2,0,0, -np.pi, np.pi)
+    test_t_r = is_in_workspace(origin[0] + l, origin[1] + h, a1,a2,0,0, -np.pi, np.pi)
+    print(test_b_l)
+    print(test_t_r)
     
-    lst = graph1.trajectory_pts_reel    #lst contient les coordonées xyz
-    
-    #initialisation du node ros
-    rclpy.init(args=args)
-    point_publisher = TrajectoryPublisher(lst,origin=origin)
-    rclpy.spin(point_publisher)
-    
-   
-    
-    #publishing
-    point_publisher.destroy_node()
-    rclpy.shutdown()
+    if (test_b_l == True and test_t_r == True):
+        
+        #vérification que l'image rentre deq
+        
+        lst = graph1.trajectory_pts_reel    #lst contient les coordonées xyz
+        
+        #initialisation du node ros
+        rclpy.init(args=args)
+        point_publisher = TrajectoryPublisher(lst,origin=origin)
+        rclpy.spin(point_publisher)
+        
+        #publishing
+        point_publisher.destroy_node()
+        rclpy.shutdown()
+    else:
+        print("Error : l'image ne rentre pas dans l'espace de travails du robot")
     
 
 if __name__ == '__main__':
