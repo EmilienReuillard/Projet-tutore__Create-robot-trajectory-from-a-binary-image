@@ -94,30 +94,48 @@ class graph:
         var = []    #ensemble N que l'on ajoutera à lst_ensemble après
         var.append(first_point) #on ajoute first point à l'ensemble 1
         var.append(next_point)  #on ajoute le point 2 à l'ensemble 1
+        used_point.append(next_point)
         
         while len(used_point) < len(self.lst_connections):
             
             #trouver le prochain point sans revenir en arrière
             for i in range(len(self.lst_connections[next_point])):
+                
                 if self.lst_connections[next_point][i] != last_point:
                     last_point = next_point
                     next_point = self.lst_connections[next_point][i]
+                    #print(f"last = {last_point} ; next = {next_point} ")
                     
                     if next_point != first_point:
                         used_point.append(next_point)
                         var.append(next_point)      #on ajoute à l'ensemble n
+                        #print(var)
+                        #print(f"len lst connection = {len(self.lst_connections)}")
+                        #print(f"len used points = {len(used_point)}")
                         
+                        if len(self.lst_connections) == len(used_point) : 
+                            #print("fini !!!")
+                            self.lst_ensembles.append(var)
+                    
                     else:
                         self.lst_ensembles.append(var)
                         var = []
 
                         #recherche d'un élément inutilisé avec la plus petite distance
-                        dist = 0
-                        pt_min_dist = 100000
+                        min_dist = 100000
+                        pt_min_dist = 0
+                        #print(f"used_point = {used_point}")
+                        #print(f"next_point = {next_point}")
                         for i in range(len(self.lst_connections)):
                             if i not in used_point:
-                                var_dist = sqrt((self.lst_connections[next_point][0] - self.lst_connections[i][0])**2 + (self.lst_connections[next_point][1] - self.lst_connections[i][1])**2)
-                                if var_dist < dist:
+                                
+                                var_dist = sqrt((self.coords_peaks[next_point][0] - self.coords_peaks[i][0])**2 + (self.coords_peaks[next_point][1] - self.coords_peaks[i][1])**2)
+                                #print(f"next_pt_x = {self.coords_peaks[next_point][0]} ; next_pt_y = {self.coords_peaks[next_point][1]}")
+                                #print(f"i_x = {self.coords_peaks[i][0]} ; i_y = {self.coords_peaks[i][1]}")
+                                #print(f"i = {i} ; var_dist = {var_dist}")
+                                if var_dist < min_dist:
+                                    #print(f"next point = {next_point}")
+                                    min_dist = var_dist
                                     pt_min_dist = i
                         
                         first_point = pt_min_dist
@@ -127,6 +145,9 @@ class graph:
                         used_point.append(next_point)
                         var.append(first_point)
                         var.append(next_point)
+                        
+                    
+                    
     
     #fait des points de trajectoire à partir des résultats trouvés par la fonction précédente
     def trajectory_points(self,pas=1):
@@ -195,7 +216,7 @@ class graph:
         #translation du repère
         minx = min(self.trajectory_pts[0])
         miny = min(self.trajectory_pts[1])
-        print(f"minx = {minx} ; miny = {miny}")
+        #print(f"minx = {minx} ; miny = {miny}")
         
         self.trajectory_pts[0] = self.trajectory_pts[0]-minx
         self.trajectory_pts[1] = self.trajectory_pts[1]-miny
@@ -208,7 +229,7 @@ class graph:
         #translation du repère
         minx = min(self.trajectory_pts[0])
         miny = min(self.trajectory_pts[1])
-        print(f"minx = {minx} ; miny = {miny}")
+        #print(f"minx = {minx} ; miny = {miny}")
         
         self.trajectory_pts[0] = self.trajectory_pts[0]-minx
         self.trajectory_pts[1] = self.trajectory_pts[1]-miny
