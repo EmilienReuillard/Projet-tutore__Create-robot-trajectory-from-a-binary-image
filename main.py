@@ -88,7 +88,7 @@ class TrajectoryPublisher(Node):
                 self.timer_period = self.period
                 z=0.5
             else: 
-                z = 0.0
+                z = 0.2
                 self.timer_period = 0.2
             print(f"x = {x} ; y = {y} ; z = {z}")    
                 
@@ -125,7 +125,7 @@ def main(args=None):
     pt_b_l = origin
     pt_b_r = [origin[0]+l,origin[1]]
     pt_t_r = [origin[0]+ l,origin[1] + h]
-    pt_t_l=[origin[0], origin[1] + h]
+    pt_t_l=  [origin[0], origin[1] + h  ]
     
     test_b_l = is_in_workspace(pt_b_l[0], pt_b_l[1], a1,a2,alpha_min,alpha_max, beta_min, beta_max)
     test_b_r = is_in_workspace(pt_b_r[0], pt_b_r[1], a1,a2,alpha_min,alpha_max, beta_min, beta_max)
