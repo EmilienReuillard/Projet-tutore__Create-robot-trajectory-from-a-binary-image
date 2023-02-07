@@ -42,10 +42,12 @@ def repere_change(x,y,pt_decallage):
 
 def is_in_workspace(x,y,a1,a2,alpha_min, alpha_max, beta_min, beta_max):
     marge = 0.05
-    v_z = sqrt(sin(np.pi - beta_max)**2*a2**2 + (a1 - a2)**2)
-    if ((x**2  + y**2) > ( a1 + a2 ) - marge):
+    v_z = ((sqrt(sin(np.pi - beta_max))**2)*(a2**2) + (a1 - a2)**2)
+    if (sqrt(x**2  + y**2) > ( a1 + a2 ) - marge):
+        print("trop loin")
         return False
     elif((x**2  + y**2) < v_z + marge):
+        print("trop près")
         return False
     else:
         return True
@@ -94,22 +96,31 @@ def main(args=None):
     #paramètres du robot
     a1 = 0.425 
     a2 = 0.345
-    
+    alpha_max = np.pi
+    alpha_min = -np.pi
+    beta_max = np.pi
+    beta_min = -np.pi
     #déclaration de l'élément graph de la classe graph
-    graph1 = graph("TE.png")
-    l = 0.4 #selon x
+    graph1 = graph("TEATE.png")
+    l = 0.3 #selon x
     graph1.image2coord(1,l)
     h = graph1.dim_reel_y #selon y
+    print(h)
     
     #vérification que l'image rentre dans la zone de travails 
-    origin = [-0.2, 0.6]
-    test_b_l = is_in_workspace(origin[0], origin[1], a1,a2,0,0, -np.pi, np.pi)
-    test_t_r = is_in_workspace(origin[0] + l, origin[1] + h, a1,a2,0,0, -np.pi, np.pi)
-    print(test_b_l)
-    print(test_t_r)
+    origin = [-0.2, 0.2]
+    pt_b_l = origin
+    pt_b_r = [origin[0]+l,origin[1]]
+    pt_t_r = [origin[0]+ l,origin[1] + h]
+    pt_t_l=[origin[0], origin[1] + h]
     
-    if (test_b_l == True and test_t_r == True):
-        
+    test_b_l = is_in_workspace(pt_b_l[0], pt_b_l[1], a1,a2,alpha_min,alpha_max, beta_min, beta_max)
+    test_b_r = is_in_workspace(pt_b_r[0], pt_b_r[1], a1,a2,alpha_min,alpha_max, beta_min, beta_max)
+    test_t_r = is_in_workspace(pt_t_r[0], pt_t_r[1], a1,a2,alpha_min,alpha_max, beta_min, beta_max)
+    test_t_l = is_in_workspace(pt_t_l[0], pt_t_l[1], a1,a2,alpha_min,alpha_max, beta_min, beta_max)
+   
+    if (test_b_l == True and test_t_r == True and test_t_l==True and test_b_r==True):
+        print("Image OK")
         #vérification que l'image rentre deq
         
         lst = graph1.trajectory_pts_reel    #lst contient les coordonées xyz
