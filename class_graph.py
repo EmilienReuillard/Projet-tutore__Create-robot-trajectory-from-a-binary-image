@@ -111,17 +111,22 @@ class graph:
                         self.lst_ensembles.append(var)
                         var = []
 
-                        #recherche d'un élément inutilisé
+                        #recherche d'un élément inutilisé avec la plus petite distance
+                        dist = 0
+                        pt_min_dist = 100000
                         for i in range(len(self.lst_connections)):
                             if i not in used_point:
-                                first_point = i
-                                last_point = first_point
-                                next_point = self.lst_connections[first_point][0]
-                                used_point.append(last_point)
-                                used_point.append(next_point)
-                                var.append(first_point)
-                                var.append(next_point)
-                                break
+                                var_dist = sqrt((self.lst_connections[next_point][0] - self.lst_connections[i][0])**2 + (self.lst_connections[next_point][1] - self.lst_connections[i][1])**2)
+                                if var_dist < dist:
+                                    pt_min_dist = i
+                        
+                        first_point = pt_min_dist
+                        last_point = first_point
+                        next_point = self.lst_connections[first_point][0]
+                        used_point.append(last_point)
+                        used_point.append(next_point)
+                        var.append(first_point)
+                        var.append(next_point)
     
     #fait des points de trajectoire à partir des résultats trouvés par la fonction précédente
     def trajectory_points(self,pas=1):
