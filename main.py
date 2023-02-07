@@ -58,7 +58,7 @@ class TrajectoryPublisher(Node):
         super().__init__('trajectory_publisher')
         self.publisher_ = self.create_publisher(JointTrajectory, '/scara_trajectory_controller/joint_trajectory', 10)
         
-        self.timer_period = 0.05 # seconds
+        self.timer_period = 0.03 # seconds
         self.timer = self.create_timer(self.timer_period, self.timer_callback)
         self.i = 0
         self.lst_point = lst_point
@@ -96,19 +96,21 @@ def main(args=None):
     #paramètres du robot
     a1 = 0.425 
     a2 = 0.345
+    
     alpha_max = np.pi
     alpha_min = -np.pi
     beta_max = np.pi
     beta_min = -np.pi
+    
     #déclaration de l'élément graph de la classe graph
-    graph1 = graph("TEATE.png")
-    l = 0.3 #selon x
-    graph1.image2coord(1,l)
+    graph1 = graph("TEATE2.png")
+    l = 0.2 #selon x
+    graph1.image2coord(3,l)
     h = graph1.dim_reel_y #selon y
     print(h)
     
     #vérification que l'image rentre dans la zone de travails 
-    origin = [-0.2, 0.2]
+    origin = [-0.3, 0.3]
     pt_b_l = origin
     pt_b_r = [origin[0]+l,origin[1]]
     pt_t_r = [origin[0]+ l,origin[1] + h]
@@ -121,6 +123,7 @@ def main(args=None):
    
     if (test_b_l == True and test_t_r == True and test_t_l==True and test_b_r==True):
         print("Image OK")
+        graph1.affichage()
         #vérification que l'image rentre deq
         
         lst = graph1.trajectory_pts_reel    #lst contient les coordonées xyz
