@@ -100,15 +100,21 @@ def main(args=None):
     l = 0.4 #selon x
     graph1.image2coord(1,l)
     h = graph1.dim_reel_y #selon y
+    print(h)
     
     #vérification que l'image rentre dans la zone de travails 
-    origin = [-0.2, 0.6]
-    test_b_l = is_in_workspace(origin[0], origin[1], a1,a2,0,0, -np.pi, np.pi)
-    test_t_r = is_in_workspace(origin[0] + l, origin[1] + h, a1,a2,0,0, -np.pi, np.pi)
-    print(test_b_l)
-    print(test_t_r)
+    origin = [-0.3, 0.6]
+    pt_b_l = origin
+    pt_b_r = [origin[0]+l,origin[1]]
+    pt_t_r = [origin[0]+ l,origin[1] + h]
+    pt_t_l=[origin[0], origin[1] + h]
     
-    if (test_b_l == True and test_t_r == True):
+    test_b_l = is_in_workspace(pt_b_l[0], pt_b_l[1], a1,a2,0,0, -np.pi, np.pi)
+    test_b_r = is_in_workspace(pt_b_r[0], pt_b_r[1], a1,a2,0,0, -np.pi, np.pi)
+    test_t_r = is_in_workspace(pt_t_r[0], pt_t_r[1], a1,a2,0,0, -np.pi, np.pi)
+    test_t_l = is_in_workspace(pt_t_l[0], pt_t_l[1] , a1,a2,0,0, -np.pi, np.pi)
+   
+    if (test_b_l == True and test_t_r == True and test_t_l==True and test_b_r==True):
         
         #vérification que l'image rentre deq
         
