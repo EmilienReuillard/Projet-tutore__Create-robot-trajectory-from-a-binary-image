@@ -57,7 +57,7 @@ class TrajectoryPublisher(Node):
     def __init__(self,lst_point,origin):
         super().__init__('trajectory_publisher')
         self.publisher_ = self.create_publisher(JointTrajectory, '/scara_trajectory_controller/joint_trajectory', 10)
-        self.period = 0.02
+        self.period = 0.05
         self.timer_period = self.period # seconds
         self.timer = self.create_timer(self.timer_period, self.timer_callback)
         self.i = 0
@@ -84,9 +84,7 @@ class TrajectoryPublisher(Node):
             y = round(y,3)
             z = round(z,3)           
                         
-            val = coord_articulaire(x,y,coude=1)
-            
-            
+            val = coord_articulaire(x,y,coude=-1)
             
             if (val == False):
                 #position inateignalbe, pas dans l'espace de travails 
@@ -138,13 +136,13 @@ def main(args=None):
     
     #déclaration de l'élément graph de la classe graph
     graph1 = graph("TTT.png")
-    l = 0.7 #selon x
+    l = 0.8#selon x
     graph1.image2coord(1,l)
     h = graph1.dim_reel_y #selon y
     print(h)
     
     #vérification que l'image rentre dans la zone de travails 
-    origin = [-0.5, 0.3]
+    origin = [-0.4, 0.3]
     pt_b_l = origin
     pt_b_r = [origin[0]+l,origin[1]]
     pt_t_r = [origin[0]+ l,origin[1] + h]
