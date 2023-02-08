@@ -58,7 +58,7 @@ class TrajectoryPublisher(Node):
         super().__init__('trajectory_publisher')
         self.publisher_ = self.create_publisher(JointTrajectory, '/scara_trajectory_controller/joint_trajectory', 10)
         self.period = 0.05
-        self.timer_period = self.period # seconds
+        #self.timer_period = self.period # seconds
         self.timer = self.create_timer(self.timer_period, self.timer_callback)
         self.i = 0
         self.lst_point = lst_point
@@ -70,10 +70,11 @@ class TrajectoryPublisher(Node):
                 
     def timer_callback(self):
         L = len(self.lst_point[0])
-        if self.i < L:
-            msg = JointTrajectory()
-            msg.header.stamp = self.get_clock().now().to_msg()
-            msg.joint_names = ['joint1','joint2','joint3']
+        msg = JointTrajectory()
+        msg.header.stamp = self.get_clock().now().to_msg()
+        msg.joint_names = ['joint1','joint2','joint3']
+        msg.points = []
+        for k in range(0,L):
             point = JointTrajectoryPoint()
             x = float(self.lst_point[0][self.i])
             y = float(self.lst_point[1][self.i])
@@ -115,13 +116,9 @@ class TrajectoryPublisher(Node):
             point.positions = [alpha,beta,z]
             point.time_from_start.sec = 0
             point.time_from_start.nanosec = int(self.timer_period * 1e9)
-            msg.points = [point]
+            msg.points.append(point)
             self.publisher_.publish(msg)
-            self.z_before = z
-        elif self.i == L:
-            print("End of the communication")
-        else:            
-            exit()           
+            self.z_before = z                 
         self.i += 1
 
 def main(args=None):
