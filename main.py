@@ -58,8 +58,8 @@ class TrajectoryPublisher(Node):
         super().__init__('trajectory_publisher')
         self.publisher_ = self.create_publisher(JointTrajectory, '/scara_trajectory_controller/joint_trajectory', 10)
         self.period = 0.1
-        #self.timer_period = self.period # seconds
-        #self.timer = self.create_timer(self.timer_period, self.timer_callback)
+        self.timer_period = self.period # seconds
+        self.timer = self.create_timer(self.timer_period, self.timer_callback)
         self.i = 0
         self.lst_point = lst_point
         self.origin = origin
@@ -69,20 +69,21 @@ class TrajectoryPublisher(Node):
         self.is_downhill = bool()
         print("test1")
     
-        def publish_message(self):
+    def timer_callback(self):
         
         
         L = len(self.lst_point[0])
         
-        msg = JointTrajectory()
         
-        msg.header.stamp = self.get_clock().now().to_msg()
+        if (self.i < L): 
         
-        msg.joint_names = ['joint1','joint2','joint3']
+            msg = JointTrajectory()
         
-        msg.points = []
-        if (self.i<L):
-             
+            msg.header.stamp = self.get_clock().now().to_msg()
+        
+            msg.joint_names = ['joint1','joint2','joint3']
+        
+            msg.points = []
             point = JointTrajectoryPoint()
             
             x = float(self.lst_point[0][self.i])
@@ -102,7 +103,6 @@ class TrajectoryPublisher(Node):
                 return
             
             alpha, beta = float(val[0]), float(val[1])
-            alpha, beta = 0,0
             top_position_z = 0.2
             bottom_position_z = 0.5
             if (z==1.0 and self.z_before!=0.0):
@@ -175,16 +175,13 @@ def main(args=None):
         #graph1.affichage()
         #vérification que l'image rentre deq
         
-        print("test4")
         
         lst = graph1.trajectory_pts_reel    #lst contient les coordonées xyz
         
         #initialisation du node ros
         rclpy.init(args=args)
         point_publisher = TrajectoryPublisher(lst,origin=origin)
-        print("test2")
-        point_publisher.publish_message()
-        print("test5")
+        
         rclpy.spin(point_publisher)
         #publishing
         #point_publisher.destroy_node()
