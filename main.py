@@ -69,20 +69,26 @@ class TrajectoryPublisher(Node):
         self.is_downhill = bool()
         print("test1")
     
-    def publish_message(self):
-        a=2
-        print("test3")
+        def publish_message(self):
+        
+        
         L = len(self.lst_point[0])
-        L = 10
+        
         msg = JointTrajectory()
+        
         msg.header.stamp = self.get_clock().now().to_msg()
+        
         msg.joint_names = ['joint1','joint2','joint3']
+        
         msg.points = []
-        for k in range(0,L):
+        if (self.i<L):
+             
             point = JointTrajectoryPoint()
+            
             x = float(self.lst_point[0][self.i])
             y = float(self.lst_point[1][self.i])
             z = float(self.lst_point[2][self.i])
+            
             x,y = repere_change(x,y,self.origin)
             
             x = round(x,3)
@@ -94,6 +100,7 @@ class TrajectoryPublisher(Node):
             if (val == False):
                 #position inateignalbe, pas dans l'espace de travails 
                 return
+            
             alpha, beta = float(val[0]), float(val[1])
             alpha, beta = 0,0
             top_position_z = 0.2
@@ -117,7 +124,6 @@ class TrajectoryPublisher(Node):
                 z=top_position_z
                 self.timer_period = 0.5
                
-                
             point.positions = [alpha,beta,z]
             
             print(f"x = {x} ; y = {y} ; z = {z}") 
@@ -127,8 +133,11 @@ class TrajectoryPublisher(Node):
             point.time_from_start.nanosec = int(self.timer_period * 1e9)
             msg.points.append(point)
             self.i += 1 
-            self.z_before = z                 
-        self.publisher_.publish(msg)
+            self.z_before = z  
+            self.publisher_.publish(msg) 
+        else : 
+            print(" End of communcation ")
+            exit() 
              
         
 
