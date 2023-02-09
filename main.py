@@ -1,6 +1,7 @@
 from class_graph import *
 import matplotlib.pyplot as plt
 
+import time
 import rclpy
 from rclpy.node import Node
 
@@ -57,7 +58,7 @@ class TrajectoryPublisher(Node):
     def __init__(self,lst_point,origin):
         super().__init__('trajectory_publisher')
         self.publisher_ = self.create_publisher(JointTrajectory, '/scara_trajectory_controller/joint_trajectory', 10)
-        self.period = 0.1
+        self.period = 0.05
         self.timer_period = self.period # seconds
         self.timer = self.create_timer(self.timer_period, self.timer_callback)
         self.i = 0
@@ -66,7 +67,9 @@ class TrajectoryPublisher(Node):
         self.x_before = float()
         self.y_before = float()
         self.z_before = float()
-        self.is_downhill = bool()
+        self.z_move = bool()
+        self.new_z = float()
+        self.time_z_move = 3
         print("test1")
     
     def timer_callback(self):
@@ -92,6 +95,8 @@ class TrajectoryPublisher(Node):
             
             x,y = repere_change(x,y,self.origin)
             
+            print(f"x = {x} ; y = {y} ; z = {z}") 
+            
             x = round(x,3)
             y = round(y,3)
             z = round(z,3)           
@@ -105,36 +110,52 @@ class TrajectoryPublisher(Node):
             alpha, beta = float(val[0]), float(val[1])
             top_position_z = 0.2
             bottom_position_z = 0.5
-            if (z==1.0 and self.z_before!=0.0):
+            if (z==0.0 and self.z_before!=0.0):
                 #passage de la position haute à le position basse. 
+                print("passage de la position haute à le position basse")
                 self.timer_period = self.period
-                self.is_downhill = False
-                #tant que le z n'a pas atttein le sol alors les position x et y ne bougent pas.
-                z=bottom_position_z
+                self.z_move = True
+                self.time_z_move = 3
+                point.time_from_start.sec = self.time_z_move
+                self.new_z = bottom_position_z
+                
             elif(z!=0.0 and self.z_before==0.0):
-                #passage de la position basse à la position haute. 
-                z = top_position_z
+                #passage de la position basse à la position haute.
+                print("passage de la position haute à le position basse") 
+                self.new_z = top_position_z
                 self.timer_period = 0.5
+                self.z_move = False
+                point.time_from_start.nanosec = int(self.timer_period * 1e9)
             elif(z==0.0):
                 #position basse 
-                z=bottom_position_z
+                print("position basse ") 
+                self.new_z=bottom_position_z
                 self.timer_period = self.period
+                self.z_move = False
+                point.time_from_start.nanosec = int(self.timer_period * 1e9)
+                
             elif(z!=0.0):
                 #position haute
-                z=top_position_z
+                print("position haute")
+                self.new_z=top_position_z
                 self.timer_period = 0.5
+                self.z_move = False
+                point.time_from_start.nanosec = int(self.timer_period * 1e9)
                
-            point.positions = [alpha,beta,z]
+            point.positions = [alpha,beta,self.new_z]
             
-            print(f"x = {x} ; y = {y} ; z = {z}") 
-            print(f"alpha = {alpha} ; beta = {beta} ; z = {z}")
+            print(f"x = {x} ; y = {y} ; z = {bottom_position_z}") 
+            print(f"alpha = {alpha} ; beta = {beta} ; z = {bottom_position_z}")
             print("----")
-            point.time_from_start.sec = 0
-            point.time_from_start.nanosec = int(self.timer_period * 1e9)
             msg.points.append(point)
+        
+            self.publisher_.publish(msg) 
             self.i += 1 
             self.z_before = z  
-            self.publisher_.publish(msg) 
+            if self.z_move:
+                time.sleep(self.time_z_move)
+                
+                
         else : 
             print(" End of communcation ")
             exit() 
