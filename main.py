@@ -59,7 +59,7 @@ class TrajectoryPublisher(Node):
         self.publisher_ = self.create_publisher(JointTrajectory, '/scara_trajectory_controller/joint_trajectory', 10)
         self.period = 0.05
         #self.timer_period = self.period # seconds
-        self.timer = self.create_timer(self.timer_period, self.timer_callback)
+        #self.timer = self.create_timer(self.timer_period, self.timer_callback)
         self.i = 0
         self.lst_point = lst_point
         self.origin = origin
@@ -67,8 +67,11 @@ class TrajectoryPublisher(Node):
         self.y_before = float()
         self.z_before = float()
         self.is_downhill = bool()
-                
-    def timer_callback(self):
+        print("test1")
+    
+    def publish_message(self):
+        a=2
+        print("test3")
         L = len(self.lst_point[0])
         msg = JointTrajectory()
         msg.header.stamp = self.get_clock().now().to_msg()
@@ -117,9 +120,11 @@ class TrajectoryPublisher(Node):
             point.time_from_start.sec = 0
             point.time_from_start.nanosec = int(self.timer_period * 1e9)
             msg.points.append(point)
-            self.publisher_.publish(msg)
+            
             self.z_before = z                 
-        self.i += 1
+        self.publisher_.publish(msg)
+        self.i += 1       
+        
 
 def main(args=None):
     #paramètres du robot
@@ -155,20 +160,27 @@ def main(args=None):
         #graph1.affichage()
         #vérification que l'image rentre deq
         
+        print("test4")
+        
         lst = graph1.trajectory_pts_reel    #lst contient les coordonées xyz
         
         #initialisation du node ros
         rclpy.init(args=args)
         point_publisher = TrajectoryPublisher(lst,origin=origin)
+        print("test2")
+        point_publisher.publish_message()
+        print("test5")
         rclpy.spin(point_publisher)
         #publishing
         point_publisher.destroy_node()
         rclpy.shutdown()
+        print("test5")
     else:
         
         print("Error : l'image ne rentre pas dans l'espace de travails du robot")
         print(f"Top left : {test_t_l}; Top right : {test_t_r}; ")
         print(f"Bottom left : {test_b_l}; Bottom right : {test_b_r}; ")
+        
 if __name__ == '__main__':
     main()
 
