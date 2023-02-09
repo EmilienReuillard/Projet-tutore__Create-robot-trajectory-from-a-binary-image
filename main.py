@@ -57,7 +57,7 @@ class TrajectoryPublisher(Node):
     def __init__(self,lst_point,origin):
         super().__init__('trajectory_publisher')
         self.publisher_ = self.create_publisher(JointTrajectory, '/scara_trajectory_controller/joint_trajectory', 10)
-        self.period = 0.05
+        self.period = 0.1
         #self.timer_period = self.period # seconds
         #self.timer = self.create_timer(self.timer_period, self.timer_callback)
         self.i = 0
@@ -73,6 +73,7 @@ class TrajectoryPublisher(Node):
         a=2
         print("test3")
         L = len(self.lst_point[0])
+        L = 10
         msg = JointTrajectory()
         msg.header.stamp = self.get_clock().now().to_msg()
         msg.joint_names = ['joint1','joint2','joint3']
@@ -94,6 +95,7 @@ class TrajectoryPublisher(Node):
                 #position inateignalbe, pas dans l'espace de travails 
                 return
             alpha, beta = float(val[0]), float(val[1])
+            alpha, beta = 0,0
             top_position_z = 0.2
             bottom_position_z = 0.5
             if (z==1.0 and self.z_before!=0.0):
@@ -114,16 +116,20 @@ class TrajectoryPublisher(Node):
                 #position haute
                 z=top_position_z
                 self.timer_period = 0.5
-            print(f"x = {x} ; y = {y} ; z = {z}")    
+               
                 
             point.positions = [alpha,beta,z]
+            
+            print(f"x = {x} ; y = {y} ; z = {z}") 
+            print(f"alpha = {alpha} ; beta = {beta} ; z = {z}")
+            print("----")
             point.time_from_start.sec = 0
             point.time_from_start.nanosec = int(self.timer_period * 1e9)
             msg.points.append(point)
-            
+            self.i += 1 
             self.z_before = z                 
         self.publisher_.publish(msg)
-        self.i += 1       
+             
         
 
 def main(args=None):
@@ -172,8 +178,8 @@ def main(args=None):
         print("test5")
         rclpy.spin(point_publisher)
         #publishing
-        point_publisher.destroy_node()
-        rclpy.shutdown()
+        #point_publisher.destroy_node()
+        #rclpy.shutdown()
         print("test5")
     else:
         
