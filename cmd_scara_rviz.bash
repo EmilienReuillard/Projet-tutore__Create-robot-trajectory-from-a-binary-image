@@ -3,7 +3,7 @@ echo " "
 
 echo "execution de :  ros2 control load_controller joint_state_broadcaster --set-state active"
 ros2 control load_controller joint_state_broadcaster --set-state active
-echo " "
+echo " " 
 
 echo "execution de :  ros2 control load_controller scara_position_controller --set-state active"
 ros2 control load_controller scara_position_controller --set-state active
