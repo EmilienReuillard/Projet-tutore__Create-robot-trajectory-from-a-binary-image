@@ -58,7 +58,7 @@ class TrajectoryPublisher(Node):
     def __init__(self,lst_point,origin):
         super().__init__('trajectory_publisher')
         self.publisher_ = self.create_publisher(JointTrajectory, '/scara_trajectory_controller/joint_trajectory', 10)
-        self.period = 0.05
+        self.period = 0.1
         self.timer_period = self.period # seconds
         self.timer = self.create_timer(self.timer_period, self.timer_callback)
         self.i = 0
@@ -141,7 +141,7 @@ class TrajectoryPublisher(Node):
                 self.timer_period = 0.5
                 self.z_move = False
                 point.time_from_start.nanosec = int(self.timer_period * 1e9)
-               
+            alpha,beta,self.new_z = 0.0, 0.0, 0.0
             point.positions = [alpha,beta,self.new_z]
             
             print(f"x = {x} ; y = {y} ; z = {bottom_position_z}") 
