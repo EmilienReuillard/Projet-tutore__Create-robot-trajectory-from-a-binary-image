@@ -165,7 +165,7 @@ class TrajectoryPublisher(Node):
             point.time_from_start.nanosec = int(self.timer_period * 1e9)
             
             #alpha,beta,self.new_z = 0.0, 0.0, 0.0
-            point.positions = [alpha,beta,self.new_z]
+            point.positions = [self.new_z,alpha,beta]
             
             print(f"x = {x} ; y = {y} ; z = {self.new_z}") 
             print(f"alpha = {alpha} ; beta = {beta} ; z = {self.new_z}")
