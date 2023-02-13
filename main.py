@@ -167,8 +167,8 @@ class TrajectoryPublisher(Node):
             #alpha,beta,self.new_z = 0.0, 0.0, 0.0
             point.positions = [alpha,beta,self.new_z]
             
-            print(f"x = {x} ; y = {y} ; z = {bottom_position_z}") 
-            print(f"alpha = {alpha} ; beta = {beta} ; z = {bottom_position_z}")
+            print(f"x = {x} ; y = {y} ; z = {self.new_z}") 
+            print(f"alpha = {alpha} ; beta = {beta} ; z = {self.new_z}")
             print("----")
             msg.points.append(point)
         
