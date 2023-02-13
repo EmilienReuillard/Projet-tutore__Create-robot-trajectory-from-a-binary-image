@@ -159,7 +159,7 @@ class TrajectoryPublisher(Node):
             
             #position basse 
             print("position basse ") 
-            self.new_z=-2.00
+            self.new_z=-0.0
             self.timer_period = self.period
             self.z_move = False
             point.time_from_start.nanosec = int(self.timer_period * 1e9)
