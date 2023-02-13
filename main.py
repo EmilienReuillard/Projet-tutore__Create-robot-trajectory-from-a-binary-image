@@ -11,6 +11,8 @@ from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
 #%%
 
+
+
 def coord_articulaire(x,y,coude=1):
     # prend en argument les coordonné x et y dand le repère de la base du robot (voir schéma)
     #retoune les angles à affecter aux articulation pour que l'effecteur ateingne le point (x,y) 
@@ -33,6 +35,14 @@ def coord_articulaire(x,y,coude=1):
     alpha = atan2(k1*y - k2*x, k2*y + k1*x)
 
     return [alpha, beta]
+
+def repere_change_dxl(x,y):
+    pt_decallage=[0,0]
+    M01 = np.array([[0,1,0,pt_decallage[0]],[1,0,0,pt_decallage[1]], [0,0,1,0], [0,0,0,1]])
+    pt_homo = np.array([[x],[y],[0],[1]])
+    pt_new = np.dot(M01,pt_homo)
+    pt_new = pt_new / pt_new[3][0]
+    return pt_new[0][0], pt_new[1][0]
 
 def repere_change(x,y,pt_decallage):
     M01 = np.array([[1,0,0,pt_decallage[0]],[0,1,0,pt_decallage[1]], [0,0,1,0], [0,0,0,1]])
@@ -94,6 +104,7 @@ class TrajectoryPublisher(Node):
             z = float(self.lst_point[2][self.i])
             
             x,y = repere_change(x,y,self.origin)
+            x,y = repere_change_dxl(x,y)
             
             print(f"x = {x} ; y = {y} ; z = {z}") 
             
