@@ -11,7 +11,7 @@ class SinusoidSurfaceMarker(Node):
         self.timer = self.create_timer(0.1, self.timer_callback)
         self.marker = Marker()
         self.marker.header.frame_id = "world"
-        self.marker.type = Marker.TRIANGLE_STRIP
+        self.marker.type = Marker.TRIANGLE_LIST
         self.marker.action = Marker.ADD
         self.marker.scale.x = 1
         self.marker.scale.y = 1
@@ -45,8 +45,6 @@ def main(args=None):
     rclpy.spin(sinusoid_surface_marker)
     sinusoid_surface_marker.destroy_node()
     rclpy.shutdown()
-
-
 
 if __name__ == '__main__':
     main()
