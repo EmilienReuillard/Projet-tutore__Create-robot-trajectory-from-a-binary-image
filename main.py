@@ -122,8 +122,8 @@ class TrajectoryPublisher(Node):
             
             alpha, beta = float(val[0]), float(val[1])
             top_position_z = 0.2
-            bottom_position_z = 0.5
-            """
+            bottom_position_z = 0.0
+            
             if (z==0.0 and self.z_before!=0.0):
                 #passage de la position haute à le position basse. 
                 print("passage de la position haute à le position basse")
@@ -155,14 +155,6 @@ class TrajectoryPublisher(Node):
                 self.timer_period = 0.5
                 self.z_move = False
                 point.time_from_start.nanosec = int(self.timer_period * 1e9)
-            """
-            
-            #position basse 
-            print("position basse ") 
-            self.new_z=0.0
-            self.timer_period = self.period
-            self.z_move = False
-            point.time_from_start.nanosec = int(self.timer_period * 1e9)
             
             #alpha,beta,self.new_z = 0.0, 0.0, 0.0
             point.positions = [self.new_z,alpha,beta]
