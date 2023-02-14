@@ -83,7 +83,7 @@ class TrajectoryPublisher(Node):
         
         L = len(self.lst_point[0])
         
-        top_position_z = 0.05
+        top_position_z = 0.02
         bottom_position_z = 0.0
         
         #premier point 
