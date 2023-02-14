@@ -67,81 +67,55 @@ if __name__ == '__main__':
    
 import rclpy
 from rclpy.node import Node
+from visualization_msgs.msg import Marker, MarkerArray
 from geometry_msgs.msg import Point
-from visualization_msgs.msg import Marker
 
-class PlaneSurface(Node):
 
+class SurfacePublisher(Node):
     def __init__(self):
-        super().__init__('plane_surface')
-        self.publisher_ = self.create_publisher(Marker, 'plane', 10)
-        timer_period = 0.1  # seconds
-        self.timer = self.create_timer(timer_period, self.timer_callback)
+        super().__init__('surface_publisher')
+        self.publisher_ = self.create_publisher(MarkerArray, 'surface_markers', 10)
+        
+        self.marker_array_ = MarkerArray()
+        self.marker_array_.markers.append(self.create_surface_marker())
+        
+        self.timer_ = self.create_timer(1.0, self.publish_markers)
 
-    def timer_callback(self):
-        marker_msg = Marker()
-        marker_msg.header.frame_id = 'map'
-        marker_msg.header.stamp = self.get_clock().now().to_msg()
+    def create_surface_marker(self):
+        marker = Marker()
+        marker.header.frame_id = "map"
+        marker.type = Marker.POINTS
+        marker.action = Marker.ADD
+        marker.scale.x = 0.1
+        marker.color.a = 1.0
+        marker.color.r = 1.0
 
-        # Set the marker type to LINE_STRIP
-        marker_msg.type = Marker.LINE_STRIP
+        points = []
+        for i in range(11):
+            x = i * 0.05 - 0.25
+            for j in range(11):
+                y = j * 0.1 - 0.5
+                z = 0.5 * math.sin(2 * math.pi * x)
+                point = Point(x, y, z)
+                points.append(point)
 
-        # Set the marker action to ADD
-        marker_msg.action = Marker.ADD
+        marker.points = points
+        return marker
+        
+    def publish_markers(self):
+        self.publisher_.publish(self.marker_array_)
 
-        # Set the marker scale
-        marker_msg.scale.x = 0.05
-        marker_msg.scale.y = 1.0
-        marker_msg.scale.z = 1.0
-
-        # Set the marker color
-        marker_msg.color.r = 0.0
-        marker_msg.color.g = 1.0
-        marker_msg.color.b = 0.0
-        marker_msg.color.a = 1.0
-
-        # Set the marker pose
-        marker_msg.pose.position.x = 0.0
-        marker_msg.pose.position.y = 0.0
-        marker_msg.pose.position.z = 0.0
-        marker_msg.pose.orientation.x = 0.0
-        marker_msg.pose.orientation.y = 0.0
-        marker_msg.pose.orientation.z = 0.0
-        marker_msg.pose.orientation.w = 1.0
-
-        # Set the marker points
-        num_points_x = 10
-        num_points_y = 2
-        marker_msg.points = []
-        for i in range(num_points_x):
-            for j in range(num_points_y):
-                x = 0.5 * i / num_points_x
-                y = j
-                z = 0.0
-                marker_point = Point()
-                marker_point.x = float(x)
-                marker_point.y = float(y)
-                marker_point.z = float(z)
-                marker_msg.points.append(marker_point)
-                if len(marker_msg.points) == 4:
-                    # Ajoute un nouveau point pour refermer le rectangle.
-                    marker_point = Point()
-                    marker_point.x = marker_msg.points[-4].x
-                    marker_point.y = marker_msg.points[-4].y
-                    marker_point.z = marker_msg.points[-4].z
-                    marker_msg.points.append(marker_point)
-            
-        self.publisher_.publish(marker_msg)
 
 def main(args=None):
     rclpy.init(args=args)
 
-    plane_surface = PlaneSurface()
+    surface_publisher = SurfacePublisher()
 
-    rclpy.spin(plane_surface)
+    rclpy.spin(surface_publisher)
 
-    plane_surface.destroy_node()
+    surface_publisher.destroy_node()
     rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()
