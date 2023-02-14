@@ -19,8 +19,8 @@ def coord_articulaire(x,y,coude=1):
     # en fonction aussi de l'orientation du coude (1 ou -1)
 
     #caractéristiques du robot 
-    a1 = 0.425  #en m voir le ficheir URDF dans scara_tutorial_ros2/scara_description/urdf
-    a2 = 0.345  #en m voir le ficheir URDF dans scara_tutorial_ros2/scara_description/urdf
+    a1 = 0.8  #en m voir le ficheir URDF dans scara_tutorial_ros2/scara_description/urdf
+    a2 = 0.8  #en m voir le ficheir URDF dans scara_tutorial_ros2/scara_description/urdf
 
     D=(x**2. + y**2. - a1**2. - a2**2.)/(2. * a1 *a2)
     
@@ -187,8 +187,8 @@ class TrajectoryPublisher(Node):
 
 def main(args=None):
     #paramètres du robot
-    a1 = 0.425 
-    a2 = 0.345
+    a1 = 0.8
+    a2 = 0.8
     
     alpha_max = np.pi
     alpha_min = -np.pi
