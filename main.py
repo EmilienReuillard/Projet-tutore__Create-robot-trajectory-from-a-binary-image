@@ -294,7 +294,7 @@ def main(args=None):
     print(h)
     
     #vérification que l'image rentre dans la zone de travails 
-    origin = [-0.5, 0.9]
+    origin = [-0.5, 1.2]
     pt_b_l = origin
     pt_b_r = [origin[0]+l,origin[1]]
     pt_t_r = [origin[0]+ l,origin[1] + h]
