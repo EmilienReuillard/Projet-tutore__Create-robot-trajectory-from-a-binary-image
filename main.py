@@ -121,7 +121,7 @@ class TrajectoryPublisher(Node):
                 return
             
             alpha, beta = float(val[0]), float(val[1])
-            top_position_z = 0.2
+            top_position_z = 0.05
             bottom_position_z = 0.0
             
             if (z==0.0 and self.z_before!=0.0):
