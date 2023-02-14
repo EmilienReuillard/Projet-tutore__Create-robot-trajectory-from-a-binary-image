@@ -85,7 +85,7 @@ class SinusoidSurface(Node):
         marker_msg.header.stamp = self.get_clock().now().to_msg()
 
         # Set the marker type to TRIANGLE_STRIP
-        marker_msg.type = Marker.TRIANGLE_STRIP
+        marker_msg.type = Marker.TRIANGLE_LIST
 
         # Set the marker action to ADD
         marker_msg.action = Marker.ADD
