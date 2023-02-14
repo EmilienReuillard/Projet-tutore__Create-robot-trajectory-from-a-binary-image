@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from visualization_msgs.msg import Marker
 from geometry_msgs.msg import Point
+import math as math
 
 class LineStripPublisher(Node):
 
