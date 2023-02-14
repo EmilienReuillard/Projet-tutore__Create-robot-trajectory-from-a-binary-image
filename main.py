@@ -319,9 +319,9 @@ def main(args=None):
         
         rclpy.spin(point_publisher)
         #publishing
-        #point_publisher.destroy_node()
-        #rclpy.shutdown()
-        print("test5")
+        point_publisher.destroy_node()
+        rclpy.shutdown()
+        
     else:
         
         print("Error : l'image ne rentre pas dans l'espace de travails du robot")
