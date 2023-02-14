@@ -208,6 +208,8 @@ class TrajectoryPublisher(Node):
         
             self.publisher_.publish(msg) 
             self.i += 1 
+            self.y_before = y
+            self.x_before = x
             self.z_before = z       
         elif(self.i == L):
             #fin du tracé, on met le crayon en haut
@@ -221,9 +223,9 @@ class TrajectoryPublisher(Node):
             msg.points = []
             point = JointTrajectoryPoint()
             
-            x = float(self.lst_point[0][self.i])
-            y = float(self.lst_point[1][self.i])
-            z = float(self.lst_point[2][self.i])
+            x = self.x_before
+            y = self.y_before
+            z = top_position_z
             
             x,y = repere_change(x,y,self.origin)
             x,y = repere_change_dxl(x,y)
@@ -254,8 +256,7 @@ class TrajectoryPublisher(Node):
         
             self.publisher_.publish(msg) 
             self.i += 1 
-        
-                  
+         
         else : 
             print(" End of communcation ")
             exit() 
