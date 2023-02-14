@@ -13,15 +13,15 @@ class SinusoidSurfaceMarker(Node):
         self.marker.header.frame_id = "world"
         self.marker.type = Marker.POINTS
         self.marker.action = Marker.ADD
-        self.marker.scale.x = 1.
-        self.marker.scale.y = 1.
-        self.marker.scale.z = 1.
+        self.marker.scale.x = 0.1
+        self.marker.scale.y = 0.1
+        self.marker.scale.z = 0.1
         self.marker.color.r = 1.0
         self.marker.color.g = 0.0
         self.marker.color.b = 0.0
         self.marker.color.a = 1.0
         
-        self.num_points = 50
+        self.num_points = 10
         self.amplitude = 1
         self.frequency = 2
 
