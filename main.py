@@ -75,7 +75,7 @@ class TrajectoryPublisher(Node):
         self.z_before = float()
         self.z_move = bool()
         self.new_z = float()
-        self.time_z_move = 3
+        self.time_z_move = 3 #en seconde 
         print("test1")
     
     def timer_callback(self):
@@ -83,8 +83,57 @@ class TrajectoryPublisher(Node):
         
         L = len(self.lst_point[0])
         
+        top_position_z = 0.05
+        bottom_position_z = 0.0
         
-        if (self.i < L): 
+        #premier point 
+        
+        if (self.i == 0):
+            msg = JointTrajectory()
+        
+            msg.header.stamp = self.get_clock().now().to_msg()
+        
+            msg.joint_names = ['joint1','joint2','joint3']
+        
+            msg.points = []
+            point = JointTrajectoryPoint()
+            
+            x = float(self.lst_point[0][self.i])
+            y = float(self.lst_point[1][self.i])
+            z = float(self.lst_point[2][self.i])
+            
+            x,y = repere_change(x,y,self.origin)
+            x,y = repere_change_dxl(x,y)
+            
+            val = coord_articulaire(x,y,coude=-1)
+            
+            if (val == False):
+                #position inateignalbe, pas dans l'espace de travails 
+                return
+            
+            alpha, beta = float(val[0]), float(val[1])
+            
+            #passage de la position haute à le position basse. 
+            print("aller au premier point")
+    
+            self.z_move = True
+            self.time_z_move = 3
+            point.time_from_start.sec = self.time_z_move
+            self.new_z = top_position_z
+
+            point.positions = [self.new_z,alpha,beta]
+            
+            print(f"x = {x} ; y = {y} ; z = {self.new_z}") 
+            print(f"alpha = {alpha} ; beta = {beta} ; z = {self.new_z}")
+            print("----")
+            
+            msg.points.append(point)
+        
+            self.publisher_.publish(msg) 
+            self.i += 1 
+            self.z_before = 1.0 # position haute
+        
+        elif (self.i < L): 
         
             msg = JointTrajectory()
         
@@ -107,9 +156,7 @@ class TrajectoryPublisher(Node):
             x = round(x,3)
             y = round(y,3)
             z = round(z,3)           
-            
-            
-                        
+                  
             val = coord_articulaire(x,y,coude=-1)
             
             if (val == False):
@@ -117,8 +164,7 @@ class TrajectoryPublisher(Node):
                 return
             
             alpha, beta = float(val[0]), float(val[1])
-            top_position_z = 0.05
-            bottom_position_z = 0.0
+            
             
             if (z==0.0 and self.z_before!=0.0):
                 #passage de la position haute à le position basse. 
@@ -162,15 +208,14 @@ class TrajectoryPublisher(Node):
         
             self.publisher_.publish(msg) 
             self.i += 1 
-            self.z_before = z  
-            if self.z_move:
-                time.sleep(self.time_z_move)
-                
+            self.z_before = z       
                 
         else : 
             print(" End of communcation ")
             exit() 
-             
+            
+        if self.z_move:
+                time.sleep(self.time_z_move)     
         
 
 def main(args=None):
