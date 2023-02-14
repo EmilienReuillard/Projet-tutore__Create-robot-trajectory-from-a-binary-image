@@ -9,10 +9,6 @@ from geometry_msgs.msg import Point
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
 
-#%%
-
-
-
 def coord_articulaire(x,y,coude=1):
     # prend en argument les coordonné x et y dand le repère de la base du robot (voir schéma)
     #retoune les angles à affecter aux articulation pour que l'effecteur ateingne le point (x,y) 
