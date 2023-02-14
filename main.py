@@ -209,7 +209,53 @@ class TrajectoryPublisher(Node):
             self.publisher_.publish(msg) 
             self.i += 1 
             self.z_before = z       
-                
+        elif(self.i == L):
+            #fin du tracé, on met le crayon en haut
+            
+            msg = JointTrajectory()
+        
+            msg.header.stamp = self.get_clock().now().to_msg()
+        
+            msg.joint_names = ['joint1','joint2','joint3']
+        
+            msg.points = []
+            point = JointTrajectoryPoint()
+            
+            x = float(self.lst_point[0][self.i])
+            y = float(self.lst_point[1][self.i])
+            z = float(self.lst_point[2][self.i])
+            
+            x,y = repere_change(x,y,self.origin)
+            x,y = repere_change_dxl(x,y)
+            
+            val = coord_articulaire(x,y,coude=-1)
+            
+            if (val == False):
+                #position inateignalbe, pas dans l'espace de travails 
+                return
+            
+            alpha, beta = float(val[0]), float(val[1])
+            
+            #passage de la position haute à le position basse. 
+            print("aller au premier point")
+    
+            self.z_move = True
+            self.time_z_move = 3
+            point.time_from_start.sec = self.time_z_move
+            self.new_z = top_position_z
+
+            point.positions = [self.new_z,alpha,beta]
+            
+            print(f"x = {x} ; y = {y} ; z = {self.new_z}") 
+            print(f"alpha = {alpha} ; beta = {beta} ; z = {self.new_z}")
+            print("----")
+            
+            msg.points.append(point)
+        
+            self.publisher_.publish(msg) 
+            self.i += 1 
+        
+                  
         else : 
             print(" End of communcation ")
             exit() 
