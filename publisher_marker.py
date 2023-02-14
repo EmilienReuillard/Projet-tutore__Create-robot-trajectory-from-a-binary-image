@@ -91,7 +91,7 @@ class SinusoidalSurfacePublisher(Node):
         marker_msg.id = self.marker_id
         self.marker_id += 1
 
-        marker_msg.type = Marker.TRIANGLE_STRIP
+        marker_msg.type = Marker.TRIANGLE_LIST
         marker_msg.action = Marker.ADD
 
         marker_msg.pose.position.x = 0.0
