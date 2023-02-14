@@ -11,11 +11,11 @@ class SinusoidSurfaceMarker(Node):
         self.timer = self.create_timer(0.1, self.timer_callback)
         self.marker = Marker()
         self.marker.header.frame_id = "world"
-        self.marker.type = Marker.TRIANGLE_LIST
+        self.marker.type = Marker.LINE_STRIP
         self.marker.action = Marker.ADD
-        self.marker.scale.x = 1
-        self.marker.scale.y = 1
-        self.marker.scale.z = 1
+        self.marker.scale.x = 1.
+        self.marker.scale.y = 1.
+        self.marker.scale.z = 1.
         self.marker.color.r = 1.0
         self.marker.color.g = 0.0
         self.marker.color.b = 0.0
@@ -32,12 +32,13 @@ class SinusoidSurfaceMarker(Node):
             y = self.amplitude * math.sin(self.frequency * x)
             z = 0
             point = Point()
-            point.x = x
-            point.y = y
-            point.z = z
+            point.x = float(x)
+            point.y = float(y)
+            point.z = float(z)
             self.marker.points.append(point)
         self.marker.header.stamp = self.get_clock().now().to_msg()
         self.marker_pub.publish(self.marker)
+        print("OK")
 
 def main(args=None):
     rclpy.init(args=args)
