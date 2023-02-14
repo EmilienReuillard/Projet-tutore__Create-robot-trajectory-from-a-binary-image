@@ -119,9 +119,9 @@ class PlaneSurface(Node):
                 y = j
                 z = 0.0
                 marker_point = Point()
-                marker_point.x = x
-                marker_point.y = y
-                marker_point.z = z
+                marker_point.x = float(x)
+                marker_point.y = float(y)
+                marker_point.z = float(z)
                 marker_msg.points.append(marker_point)
                 if len(marker_msg.points) == 4:
                     # Ajoute un nouveau point pour refermer le rectangle.
