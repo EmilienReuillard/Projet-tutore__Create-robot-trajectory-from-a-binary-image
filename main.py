@@ -86,7 +86,7 @@ class TrajectoryPublisher(Node):
         top_position_z = 0.02
         bottom_position_z = 0.0
         
-        #premier point 
+        #premier point lol
         
         if (self.i == 0):
             msg = JointTrajectory()
