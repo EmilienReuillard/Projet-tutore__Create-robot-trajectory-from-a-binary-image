@@ -112,7 +112,7 @@ class TrajectoryPublisher(Node):
             y = round(y,3)
             z = round(z,3)           
             
-            z=0.0
+            
                         
             val = coord_articulaire(x,y,coude=-1)
             
