@@ -64,56 +64,42 @@ if __name__ == '__main__':
     
 
     """
-import math as math
 import rclpy
 from rclpy.node import Node
-from visualization_msgs.msg import Marker, MarkerArray
+from visualization_msgs.msg import Marker
 from geometry_msgs.msg import Point
 
 
-class SurfacePublisher(Node):
-    def __init__(self):
-        super().__init__('surface_publisher')
-        self.publisher_ = self.create_publisher(MarkerArray, 'surface_markers', 10)
-        
-        self.marker_array_ = MarkerArray()
-        self.marker_array_.markers.append(self.create_surface_marker())
-        
-        self.timer_ = self.create_timer(1.0, self.publish_markers)
+class MarkerPublisher(Node):
 
-    def create_surface_marker(self):
+    def __init__(self):
+        super().__init__('marker_publisher')
+        self.publisher_ = self.create_publisher(Marker, 'marker', 10)
+
+    def publish_marker(self):
         marker = Marker()
         marker.header.frame_id = "map"
-        marker.type = Marker.POINTS
+        marker.type = Marker.CUBE
         marker.action = Marker.ADD
-        marker.scale.x = 0.1
-        marker.color.a = 1.0
+        marker.scale.x = 1.0
+        marker.scale.y = 0.5
+        marker.scale.z = 0.01
         marker.color.r = 1.0
-
-        points = []
-        for i in range(11):
-            x = i * 0.05 - 0.25
-            for j in range(11):
-                y = j * 0.1 - 0.5
-                z = 0.5 * math.sin(2 * math.pi * x)
-                point = Point(x, y, z)
-                points.append(point)
-
-        marker.points = points
-        return marker
-        
-    def publish_markers(self):
-        self.publisher_.publish(self.marker_array_)
+        marker.color.g = 0.0
+        marker.color.b = 0.0
+        marker.color.a = 1.0
+        marker.pose.position.x = 0.5
+        marker.pose.position.y = 0.25
+        marker.pose.position.z = 0.005
+        self.publisher_.publish(marker)
 
 
 def main(args=None):
     rclpy.init(args=args)
-
-    surface_publisher = SurfacePublisher()
-
-    rclpy.spin(surface_publisher)
-
-    surface_publisher.destroy_node()
+    marker_publisher = MarkerPublisher()
+    while rclpy.ok():
+        marker_publisher.publish_marker()
+        rclpy.spin_once(marker_publisher)
     rclpy.shutdown()
 
 
