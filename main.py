@@ -44,7 +44,7 @@ def repere_change(x,y,pt_decallage):
     pt_new = pt_new / pt_new[3][0]
     return pt_new[0][0], pt_new[1][0]
 
-def is_in_workspace(x,y,a1,a2,alpha_min, alpha_max, beta_min, beta_max):
+def is_in_workspace(x,y,a1,a2,alpha_min, alpha_max, beta_min, beta_max, coude):
     marge = 0.05
     v_z = ((sqrt(sin(np.pi - beta_max))**2)*(a2**2) + (a1 - a2)**2)
     if (sqrt(x**2  + y**2) > ( a1 + a2 ) - marge):
@@ -54,11 +54,20 @@ def is_in_workspace(x,y,a1,a2,alpha_min, alpha_max, beta_min, beta_max):
         print("trop près")
         return False
     else:
+        #pour le point on calcul les angles articulaires et vérifie si ils ne dépassent pas les valeur max et min 
+        val = coord_articulaire(x,y,a1,a2,coude)
+        alpha, beta = float(val[0]), float(val[1])
+        if not(alpha_min<=alpha<=alpha_max):
+            return False
+        
+        elif not(beta_min<=beta<=beta_max):
+            return False
+        
         return True
 
 class TrajectoryPublisher(Node):
 
-    def __init__(self,lst_point,origin,a1,a2):
+    def __init__(self,lst_point,origin,a1,a2, coude):
         super().__init__('trajectory_publisher')
         self.publisher_ = self.create_publisher(JointTrajectory, '/scara_trajectory_controller/joint_trajectory', 10)
         self.period = 0.05
@@ -73,7 +82,7 @@ class TrajectoryPublisher(Node):
         self.z_move = bool()
         self.new_z = float()
         self.time_z_move = 3 #en seconde 
-        
+        self.coude = coude
         self.a1 = a1
         self.a2 = a2
         print("test1")
@@ -105,7 +114,7 @@ class TrajectoryPublisher(Node):
             x,y = repere_change(x,y,self.origin)
             x,y = repere_change_dxl(x,y)
             
-            val = coord_articulaire(x,y,a1=self.a1,a2=self.a2,coude=-1)
+            val = coord_articulaire(x,y,a1=self.a1,a2=self.a2,coude=self.coude)
             
             if (val == False):
                 #position inateignalbe, pas dans l'espace de travails 
@@ -157,7 +166,7 @@ class TrajectoryPublisher(Node):
             y = round(y,3)
             z = round(z,3)           
                   
-            val = coord_articulaire(x,y,a1=self.a1,a2=self.a2,coude=-1)
+            val = coord_articulaire(x,y,a1=self.a1,a2=self.a2,coude=self.coude)
             
             if (val == False):
                 #position inateignalbe, pas dans l'espace de travails 
@@ -230,7 +239,7 @@ class TrajectoryPublisher(Node):
             x,y = repere_change(x,y,self.origin)
             x,y = repere_change_dxl(x,y)
             
-            val = coord_articulaire(x,y,a1=self.a1,a2=self.a2,coude=-1)
+            val = coord_articulaire(x,y,a1=self.a1,a2=self.a2,coude=self.coude)
             
             if (val == False):
                 #position inateignalbe, pas dans l'espace de travails 
@@ -270,6 +279,7 @@ def main(args=None):
     a1 = 0.8  #en m voir le ficheir URDF dans scara_tutorial_ros2/scara_description/urdf
     a2 = 0.8  #en m voir le ficheir URDF dans scara_tutorial_ros2/scara_description/urdf
     
+    coude = 1
     
     alpha_max = (85/180)*np.pi  # 85 degres en radian 
     alpha_min = -(85/180)*np.pi # -85 degres en radian 
@@ -305,7 +315,7 @@ def main(args=None):
         
         #initialisation du node ros
         rclpy.init(args=args)
-        point_publisher = TrajectoryPublisher(lst,origin=origin,a1=a1,a2=a2)
+        point_publisher = TrajectoryPublisher(lst,origin=origin,a1=a1,a2=a2, coude=coude)
         
         rclpy.spin(point_publisher)
         #publishing
