@@ -9,14 +9,11 @@ from geometry_msgs.msg import Point
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
 
-def coord_articulaire(x,y,coude=1):
+def coord_articulaire(x,y,a1,a2,coude=1,):
     # prend en argument les coordonné x et y dand le repère de la base du robot (voir schéma)
     #retoune les angles à affecter aux articulation pour que l'effecteur ateingne le point (x,y) 
     # en fonction aussi de l'orientation du coude (1 ou -1)
-
-    #caractéristiques du robot 
-    a1 = 0.8  #en m voir le ficheir URDF dans scara_tutorial_ros2/scara_description/urdf
-    a2 = 0.8  #en m voir le ficheir URDF dans scara_tutorial_ros2/scara_description/urdf
+    
 
     D=(x**2. + y**2. - a1**2. - a2**2.)/(2. * a1 *a2)
     
@@ -61,7 +58,7 @@ def is_in_workspace(x,y,a1,a2,alpha_min, alpha_max, beta_min, beta_max):
 
 class TrajectoryPublisher(Node):
 
-    def __init__(self,lst_point,origin):
+    def __init__(self,lst_point,origin,a1,a2):
         super().__init__('trajectory_publisher')
         self.publisher_ = self.create_publisher(JointTrajectory, '/scara_trajectory_controller/joint_trajectory', 10)
         self.period = 0.05
@@ -76,6 +73,9 @@ class TrajectoryPublisher(Node):
         self.z_move = bool()
         self.new_z = float()
         self.time_z_move = 3 #en seconde 
+        
+        self.a1 = a1
+        self.a2 = a2
         print("test1")
     
     def timer_callback(self):
@@ -105,7 +105,7 @@ class TrajectoryPublisher(Node):
             x,y = repere_change(x,y,self.origin)
             x,y = repere_change_dxl(x,y)
             
-            val = coord_articulaire(x,y,coude=-1)
+            val = coord_articulaire(x,y,a1=self.a1,a2=self.a2,coude=-1)
             
             if (val == False):
                 #position inateignalbe, pas dans l'espace de travails 
@@ -157,7 +157,7 @@ class TrajectoryPublisher(Node):
             y = round(y,3)
             z = round(z,3)           
                   
-            val = coord_articulaire(x,y,coude=-1)
+            val = coord_articulaire(x,y,a1=self.a1,a2=self.a2,coude=-1)
             
             if (val == False):
                 #position inateignalbe, pas dans l'espace de travails 
@@ -230,7 +230,7 @@ class TrajectoryPublisher(Node):
             x,y = repere_change(x,y,self.origin)
             x,y = repere_change_dxl(x,y)
             
-            val = coord_articulaire(x,y,coude=-1)
+            val = coord_articulaire(x,y,a1=self.a1,a2=self.a2,coude=-1)
             
             if (val == False):
                 #position inateignalbe, pas dans l'espace de travails 
@@ -267,13 +267,14 @@ class TrajectoryPublisher(Node):
 
 def main(args=None):
     #paramètres du robot
-    a1 = 0.8
-    a2 = 0.8
+    a1 = 0.8  #en m voir le ficheir URDF dans scara_tutorial_ros2/scara_description/urdf
+    a2 = 0.8  #en m voir le ficheir URDF dans scara_tutorial_ros2/scara_description/urdf
     
-    alpha_max = np.pi
-    alpha_min = -np.pi
-    beta_max = np.pi
-    beta_min = -np.pi
+    
+    alpha_max = (85/180)*np.pi  # 85 degres en radian 
+    alpha_min = -(85/180)*np.pi # -85 degres en radian 
+    beta_max = (95/180)*np.pi   # 95 degres en radian 
+    beta_min = -(95/180)*np.pi  # - 95 degres en radian 
     
     #déclaration de l'élément graph de la classe graph
     graph1 = graph("TTT.png")
@@ -304,7 +305,7 @@ def main(args=None):
         
         #initialisation du node ros
         rclpy.init(args=args)
-        point_publisher = TrajectoryPublisher(lst,origin=origin)
+        point_publisher = TrajectoryPublisher(lst,origin=origin,a1=a1,a2=a2)
         
         rclpy.spin(point_publisher)
         #publishing
