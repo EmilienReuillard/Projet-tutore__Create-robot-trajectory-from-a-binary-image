@@ -100,8 +100,6 @@ class TrajectoryPublisher(Node):
         msg.points = []
         point = JointTrajectoryPoint()
         
-        
-        
         #premier point 
         
         if (self.i == 0):
