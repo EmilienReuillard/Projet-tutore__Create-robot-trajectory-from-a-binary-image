@@ -1,4 +1,5 @@
 from class_graph import *
+from class_graph2 import *
 import matplotlib.pyplot as plt
 
 import time
@@ -249,7 +250,7 @@ def main(args=None):
     beta_min = -(95/180)*np.pi  # - 95 degres en radian 
     
     #déclaration de l'élément graph de la classe graph
-    graph1 = graph("TTT.png")
+    graph1 = Graph2("TPS.png")
     l = 1#selon x
     graph1.image2coord(2,l)
     h = graph1.dim_reel_y #selon y
