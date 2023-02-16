@@ -81,7 +81,7 @@ class TrajectoryPublisher(Node):
         self.z_before = float()
         self.z_move = bool()
         self.new_z = float()
-        self.time_z_move = 3 #en seconde 
+        self.time_z_move = 6 #en seconde 
         self.coude = coude
         self.a1 = a1
         self.a2 = a2
@@ -89,7 +89,7 @@ class TrajectoryPublisher(Node):
     def timer_callback(self):
         L = len(self.lst_point[0])
         
-        top_position_z = 0.02
+        top_position_z = 1.0
         bottom_position_z = 0.0
         msg = JointTrajectory()
         
@@ -129,7 +129,6 @@ class TrajectoryPublisher(Node):
             print("aller au premier point")
     
             self.z_move = True
-            self.time_z_move = 3
             point.time_from_start.sec = self.time_z_move
             self.new_z = top_position_z
             
@@ -221,15 +220,17 @@ class TrajectoryPublisher(Node):
         print(f"x = {x} ; y = {y} ; z = {self.new_z}") 
         print(f"alpha = {alpha} ; beta = {beta} ; z = {self.new_z}")
         print("----")
-        msg.points.append(point)
         
+        msg.points.append(point)
         self.publisher_.publish(msg) 
         
-        self.i += 1 
+        
         self.y_before = y
         self.x_before = x
         self.z_before = z  
-            
+        
+        self.i += 1     
+        
         if self.z_move:
                 time.sleep(self.time_z_move)     
         
