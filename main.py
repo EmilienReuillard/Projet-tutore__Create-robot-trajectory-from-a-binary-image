@@ -251,7 +251,7 @@ def main(args=None):
     #déclaration de l'élément graph de la classe graph
     graph1 = graph("TTT.png")
     l = 1#selon x
-    graph1.image2coord(5,l)
+    graph1.image2coord(2,l)
     h = graph1.dim_reel_y #selon y
     print(h)
     
