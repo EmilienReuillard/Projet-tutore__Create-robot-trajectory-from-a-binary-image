@@ -70,7 +70,7 @@ class TrajectoryPublisher(Node):
     def __init__(self,lst_point,origin,a1,a2, coude):
         super().__init__('trajectory_publisher')
         self.publisher_ = self.create_publisher(JointTrajectory, '/scara_trajectory_controller/joint_trajectory', 10)
-        self.period = 0.2
+        self.period = 0.08
         self.timer_period = self.period # seconds
         self.timer = self.create_timer(self.timer_period, self.timer_callback)
         self.i = 0
@@ -224,7 +224,7 @@ def main(args=None):
     #déclaration de l'élément graph de la classe graph
     graph1 = graph("TTT.png")
     l = 1#selon x
-    graph1.image2coord(1,l)
+    graph1.image2coord(5,l)
     h = graph1.dim_reel_y #selon y
     print(h)
     
