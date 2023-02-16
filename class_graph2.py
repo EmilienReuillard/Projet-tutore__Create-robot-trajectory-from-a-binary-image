@@ -274,6 +274,8 @@ class Graph2:
         
     def createAllEnsembles(self, pas = 1):
         
+        self.pas_graph = pas
+        
         for i in range(self.N_regions):
             
             E = Ensemble(i, self)
@@ -283,8 +285,6 @@ class Graph2:
             #self.lst_ensembles[i].affiche_X_Y()
         
     def connectAllEnsemble(self):
-        
-        
         
         for i in range(self.N_regions):
             for j in range(len(self.lst_ensembles[i].lst_trajectory)):
@@ -310,6 +310,8 @@ class Graph2:
                     self.lst_tot[0].append(int(xk))
                     self.lst_tot[1].append(int(yk))
                     self.lst_tot[2].append(int(zk))
+                    
+     
         
     #Mettre le repère en bas à gauche           
     def RotationRep(self):
@@ -323,7 +325,67 @@ class Graph2:
                 
         self.lst_tot = [new_listx, new_listy, self.lst_tot[2]]
         
+    def ajout_cadre(self):
         
+        Xmin = 0
+        Xmax = len(self.lst_tot[0])
+        Ymin = 0
+        Ymax = len(self.lst_tot[1])
+        
+        #Ajout du chemin pour le prochain ensemble
+        pt1 = self.lst_ensembles[-1].last_pt
+        pt2 = [Xmin , Ymin]
+        
+        #Distance entre les 2 points
+        D = sqrt((pt1[0] - pt2[0])**2 + 
+                    (pt1[1] - pt2[1])**2 )
+            
+        for k in range(int(D//self.pas_graph)):
+            
+            xk = pt1[0] + k*self.lst_ensembles[i].pas*( ( pt2[0] - pt1[0] ) / D )
+            yk = pt1[1] + k*self.lst_ensembles[i].pas*( ( pt2[1] - pt1[1] ) / D )
+            zk = 1
+            
+            self.lst_tot[0].append(int(xk))
+            self.lst_tot[1].append(int(yk))
+            self.lst_tot[2].append(int(zk))
+        
+        #On trace le contour
+        #1 bas [Xmin, Ymin] --> [Xmax, Ymin]
+        X1 = np.arange(Xmin, Xmax, self.pas_graph)
+        Y1 = [Ymin]*Ymax
+        
+        for i in range(Xmax):
+            self.lst_tot[0].append(X1[i])
+            self.lst_tot[1].append(Y1[i])
+            self.lst_tot[2].append(0)
+            
+        #2 droite [Xmax, Ymin]-->[Xmax, Ymax]
+        X2 = [Xmax]*Xmax
+        Y2 = np.arange(Ymin, Ymax, self.pas_graph)
+        
+        for i in range(Xmax):
+            self.lst_tot[0].append(X2[i])
+            self.lst_tot[1].append(Y2[i])
+            self.lst_tot[2].append(0)
+        
+        #3[Xmax, Ymax] --> [Xmin, Ymax]
+        X3 = np.arange(Xmax, Xmin, self.pas_graph)
+        Y3 = [Ymax]*Xmax
+        
+        for i in range(Xmax):
+            self.lst_tot[0].append(X3[i])
+            self.lst_tot[1].append(Y3[i])
+            self.lst_tot[2].append(0)
+        
+        #4[Xmin, Ymax] --> [Xmin, Ymin]
+        X4 = [[Xmin]*Xmax]
+        Y4 = np.arange(Ymax, Ymin, self.pas_graph)
+        
+        for i in range(Xmax):
+            self.lst_tot[0].append(X4[i])
+            self.lst_tot[1].append(Y4[i])
+            self.lst_tot[2].append(0)
         
     def traj_d2r(self, fact_echelle = 10*(10**-2)): #fact_echelle == longueur en x de l'image réelle
         
@@ -342,11 +404,15 @@ class Graph2:
         plt.plot(self.lst_tot[0],self.lst_tot[1])
         plt.show()
     
-    def ProcessingGene(self, pas = 1, fact_echelle = 1,affichage = 0):
+    def ProcessingGene(self, pas = 1, fact_echelle = 1,affichage = 0 ,cadre = 0):
         self.find_ensembles()
         self.createAllEnsembles(pas)
         self.connectAllEnsemble()
         self.RotationRep()
+        
+        if cadre == 1:
+            self.ajout_cadre()
+            
         self.traj_d2r(fact_echelle)
         
         if affichage == 1:
