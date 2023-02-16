@@ -254,10 +254,10 @@ def main(args=None):
     beta_min = -(115/180)*np.pi  # - 95 degres en radian 
     
     #déclaration de l'élément graph de la classe graph
-    l = 1.0#selon x
+    l = 1.2#selon x
     graph1 = graph("TTT.png")
     graph1.image2coord(pas=1 , fact_echelle= l)
-    origin = [-0.5, 0.9]
+    origin = [-0.6, 0.9]
     h=graph1.dim_reel_y
     
     """
