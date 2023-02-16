@@ -349,7 +349,7 @@ class Graph2:
         X1 = np.arange(Xmin, Xmax, self.pas_graph)
         Y1 = [Ymin]*Ymax
         
-        for i in range(X1):
+        for i in range(len(X1)):
             self.lst_tot[0].append(X1[i])
             self.lst_tot[1].append(Y1[i])
             self.lst_tot[2].append(0)
@@ -358,7 +358,7 @@ class Graph2:
         X2 = [Xmax]*Xmax
         Y2 = np.arange(Ymin, Ymax, self.pas_graph)
         
-        for i in range(X2):
+        for i in range(len(X2)):
             self.lst_tot[0].append(X2[i])
             self.lst_tot[1].append(Y2[i])
             self.lst_tot[2].append(0)
@@ -367,7 +367,7 @@ class Graph2:
         X3 = np.arange(Xmax, Xmin, self.pas_graph)
         Y3 = [Ymax]*Xmax
         
-        for i in range(X3):
+        for i in range(len(X3)):
             self.lst_tot[0].append(X3[i])
             self.lst_tot[1].append(Y3[i])
             self.lst_tot[2].append(0)
@@ -376,7 +376,7 @@ class Graph2:
         X4 = [[Xmin]*Xmax]
         Y4 = np.arange(Ymax, Ymin, self.pas_graph)
         
-        for i in range(X4):
+        for i in range(len(X4)):
             self.lst_tot[0].append(X4[i])
             self.lst_tot[1].append(Y4[i])
             self.lst_tot[2].append(0)
