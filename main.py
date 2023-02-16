@@ -256,7 +256,7 @@ def main(args=None):
     #déclaration de l'élément graph de la classe graph
     graph1 = Graph2("TPS.png")
     l = 0.6#selon x
-    graph1.ProcessingGene(pas=1 , fact_echelle= l)
+    graph1.ProcessingGene(pas=1 , fact_echelle= l,cadre=1, affichage=1)
     h = graph1.dim_reel_y #selon y
     print(h)
     
