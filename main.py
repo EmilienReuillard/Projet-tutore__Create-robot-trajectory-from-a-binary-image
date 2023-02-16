@@ -260,12 +260,13 @@ def main(args=None):
     origin = [-0.5, 0.9]
     h=graph1.dim_reel_y
     
-    #l = 0.6
-    #graph1 = Graph2("TPS.png")
-    #graph1.ProcessingGene(pas=1 , fact_echelle= l,cadre=1, affichage=0)
-    #origin = [-0.3, 0.9]
-    #h=graph1.dim_reel_y
-    
+    """
+    l = 0.6
+    graph1 = Graph2("TPS.png")
+    graph1.ProcessingGene(pas=1 , fact_echelle= l,cadre=1, affichage=0)
+    origin = [-0.3, 0.9]
+    h=graph1.dim_reel_y
+    """
     #vérification que l'image rentre dans la zone de travails 
     pt_b_l = origin
     pt_b_r = [origin[0]+l,origin[1]]

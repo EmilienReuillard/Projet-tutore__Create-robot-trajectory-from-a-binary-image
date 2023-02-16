@@ -242,7 +242,7 @@ class Graph2:
     lst_connections = []    #Pour chaque pic, répértorie les points connectés au n-ieme de la liste
     lst_ensembles = []  #Répertorie les points interconnerctés
     lst_tot = [ [] , [] , [] ]  #liste qui fait le total de toutes les coordonnées trouvées précedement [x,y,z]
-    lst_tot_reel = [[],[],[]] #coordonnées réelles à parir d'un facteur d'échelle
+    trajectory_pts_reel = [[],[],[]] #coordonnées réelles à parir d'un facteur d'échelle
     
 #______FONCTIONS_____
 
@@ -377,7 +377,7 @@ class Graph2:
         
         for i in range(len(self.lst_tot)):
             for j in range(len(self.lst_tot[i])):
-                self.lst_tot_reel[i].append( self.lst_tot[i][j] * dim_px)
+                self.trajectory_pts_reel[i].append( self.lst_tot[i][j] * dim_px)
         
     
     #Affichage final
