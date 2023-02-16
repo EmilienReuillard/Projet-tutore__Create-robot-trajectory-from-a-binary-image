@@ -216,12 +216,6 @@ class Ensemble:
         plt.show()
 
 
-        
-                        
-                
-            
-    
-
 class Graph2:
     
 #_______VARIABLES_______   
@@ -342,8 +336,8 @@ class Graph2:
             
         for k in range(int(D//self.pas_graph)):
             
-            xk = pt1[0] + k*self.lst_ensembles[i].pas*( ( pt2[0] - pt1[0] ) / D )
-            yk = pt1[1] + k*self.lst_ensembles[i].pas*( ( pt2[1] - pt1[1] ) / D )
+            xk = pt1[0] + k*self.pas_graph*( ( pt2[0] - pt1[0] ) / D )
+            yk = pt1[1] + k*self.pas_graph*( ( pt2[1] - pt1[1] ) / D )
             zk = 1
             
             self.lst_tot[0].append(int(xk))
