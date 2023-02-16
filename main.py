@@ -160,32 +160,33 @@ class TrajectoryPublisher(Node):
             if (z==0.0 and self.z_before!=0.0):
                 #passage de la position haute à le position basse. 
                 print("passage de la position haute à le position basse")
-                self.timer_period = self.period
                 self.z_move = True
-                point.time_from_start.sec = self.time_z_move
                 self.new_z = bottom_position_z
+                point.time_from_start.sec = self.time_z_move
                 
             elif(z!=0.0 and self.z_before==0.0):
                 #passage de la position basse à la position haute.
                 print("passage de la position haute à le position basse") 
+                self.z_move = True
                 self.new_z = top_position_z
-                self.z_move = False
-                point.time_from_start.nanosec = int(self.timer_period * 1e9)
+                point.time_from_start.sec = self.time_z_move
+                
             elif(z==0.0):
                 #position basse 
                 print("position basse ") 
+                self.z_move = False
                 self.new_z=bottom_position_z
                 self.timer_period = self.period
-                self.z_move = False
                 point.time_from_start.nanosec = int(self.timer_period * 1e9)
                 
             elif(z!=0.0):
                 #position haute
                 print("position haute")
-                self.new_z=top_position_z
                 self.z_move = False
+                self.new_z=top_position_z
+                self.timer_period = self.period
                 point.time_from_start.nanosec = int(self.timer_period * 1e9)
-                 
+                
         elif(self.i == L):
             #fin du tracé, on met le crayon en haut
             
