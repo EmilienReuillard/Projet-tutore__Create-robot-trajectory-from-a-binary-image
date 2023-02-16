@@ -283,8 +283,8 @@ def main(args=None):
         #vérification que l'image rentre deq
         
         
-        lst = graph1.lst_tot_reel    #lst contient les coordonées xyz
-        
+        #lst = graph1.lst_tot_reel    #lst contient les coordonées xyz
+        lst = graph1.trajectory_pts_reel #lst contient les coordonées xyz
         #initialisation du node ros
         rclpy.init(args=args)
         point_publisher = TrajectoryPublisher(lst,origin=origin,a1=a1,a2=a2, coude=coude)
