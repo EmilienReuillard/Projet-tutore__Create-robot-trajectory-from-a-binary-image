@@ -253,15 +253,27 @@ def main(args=None):
     beta_max = (115/180)*np.pi   # 95 degres en radian 
     beta_min = -(115/180)*np.pi  # - 95 degres en radian 
     
-    #déclaration de l'élément graph de la classe graph
-    graph1 = Graph2("TPS.png")
-    l = 0.6#selon x
-    graph1.ProcessingGene(pas=1 , fact_echelle= l,cadre=0, affichage=0)
-    h = graph1.dim_reel_y #selon y
-    print(h)
+    #Partie à utiliser pour former des dessins avec des coins (exemple des lettres)
+    # ---------------------------------------------
+    l = 1.2#selon x
+    graph1 = graph("TTT.png")
+    graph1.image2coord(pas=1 , fact_echelle= l)
+    origin = [-0.6, 0.9]
+    h=graph1.dim_reel_y
+    #---------------------------------------------
     
-    #vérification que l'image rentre dans la zone de travails 
+    #Partie à utiliser pour former des dessins avec des formes arrondis (exemple logo de TPS) 
+    #---------------------------------------------    
+    """
+    l = 0.6
+    graph1 = Graph2("TPS.png")
+    graph1.ProcessingGene(pas=1 , fact_echelle= l,cadre=1, affichage=0)
     origin = [-0.3, 0.9]
+    h=graph1.dim_reel_y
+    """
+    #---------------------------------------------
+
+    #vérification que l'image rentre dans la zone de travails 
     pt_b_l = origin
     pt_b_r = [origin[0]+l,origin[1]]
     pt_t_r = [origin[0]+ l,origin[1] + h]
