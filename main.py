@@ -103,26 +103,30 @@ class TrajectoryPublisher(Node):
         msg.points = []
         point = JointTrajectoryPoint()
         
-        #premier point 
-        
-        if (self.i == 0):
+        x = float(self.lst_point[0][self.i])
+        y = float(self.lst_point[1][self.i])
+        z = float(self.lst_point[2][self.i])
             
+        x,y = repere_change(x,y,self.origin)
+        x,y = repere_change_dxl(x,y)
             
-            x = float(self.lst_point[0][self.i])
-            y = float(self.lst_point[1][self.i])
-            z = float(self.lst_point[2][self.i])
+        print(f"x = {x} ; y = {y} ; z = {z}") 
             
-            x,y = repere_change(x,y,self.origin)
-            x,y = repere_change_dxl(x,y)
+        x = round(x,3)
+        y = round(y,3)
+        z = round(z,3)           
+                  
+        val = coord_articulaire(x,y,a1=self.a1,a2=self.a2,coude=self.coude)
             
-            val = coord_articulaire(x,y,a1=self.a1,a2=self.a2,coude=self.coude)
-            
-            if (val == False):
+        if (val == False):
                 #position inateignalbe, pas dans l'espace de travails 
                 return
             
-            alpha, beta = float(val[0]), float(val[1])
-            
+        alpha, beta = float(val[0]), float(val[1])
+        
+        #premier point 
+        
+        if (self.i == 0):
             #passage de la position haute à le position basse. 
             print("aller au premier point")
     
@@ -132,28 +136,6 @@ class TrajectoryPublisher(Node):
             self.new_z = top_position_z
             
         elif (self.i < L): 
-            x = float(self.lst_point[0][self.i])
-            y = float(self.lst_point[1][self.i])
-            z = float(self.lst_point[2][self.i])
-            
-            x,y = repere_change(x,y,self.origin)
-            x,y = repere_change_dxl(x,y)
-            
-            print(f"x = {x} ; y = {y} ; z = {z}") 
-            
-            x = round(x,3)
-            y = round(y,3)
-            z = round(z,3)           
-                  
-            val = coord_articulaire(x,y,a1=self.a1,a2=self.a2,coude=self.coude)
-            
-            if (val == False):
-                #position inateignalbe, pas dans l'espace de travails 
-                return
-            
-            alpha, beta = float(val[0]), float(val[1])
-            
-            
             if (z==0.0 and self.z_before!=0.0):
                 #passage de la position haute à le position basse. 
                 print("passage de la position haute à le position basse")
