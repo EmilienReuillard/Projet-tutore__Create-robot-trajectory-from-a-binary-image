@@ -70,7 +70,7 @@ class TrajectoryPublisher(Node):
     def __init__(self,lst_point,origin,a1,a2, coude):
         super().__init__('trajectory_publisher')
         self.publisher_ = self.create_publisher(JointTrajectory, '/scara_trajectory_controller/joint_trajectory', 10)
-        self.period = 0.05
+        self.period = 0.2
         self.timer_period = self.period # seconds
         self.timer = self.create_timer(self.timer_period, self.timer_callback)
         self.i = 0
@@ -145,7 +145,6 @@ class TrajectoryPublisher(Node):
                 #passage de la position basse à la position haute.
                 print("passage de la position haute à le position basse") 
                 self.new_z = top_position_z
-                self.timer_period = 0.5
                 self.z_move = False
                 point.time_from_start.nanosec = int(self.timer_period * 1e9)
             elif(z==0.0):
@@ -160,7 +159,6 @@ class TrajectoryPublisher(Node):
                 #position haute
                 print("position haute")
                 self.new_z=top_position_z
-                self.timer_period = 0.5
                 self.z_move = False
                 point.time_from_start.nanosec = int(self.timer_period * 1e9)
                  
