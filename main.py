@@ -75,7 +75,7 @@ class TrajectoryPublisher(Node):
     def __init__(self,lst_point,origin,a1,a2, coude):
         super().__init__('trajectory_publisher')
         self.publisher_ = self.create_publisher(JointTrajectory, '/scara_trajectory_controller/joint_trajectory', 10)
-        self.period = 0.05
+        self.period = 0.1
         self.timer_period = self.period # seconds
         self.timer = self.create_timer(self.timer_period, self.timer_callback)
         self.i = 0
@@ -94,7 +94,7 @@ class TrajectoryPublisher(Node):
     def timer_callback(self):
         L = len(self.lst_point[0])
         
-        top_position_z = 1.0
+        top_position_z = 0.02
         bottom_position_z = 0.0
         msg = JointTrajectory()
         
@@ -256,7 +256,7 @@ def main(args=None):
     #déclaration de l'élément graph de la classe graph
     graph1 = Graph2("TPS.png")
     l = 0.6#selon x
-    graph1.ProcessingGene(pas=1 , fact_echelle= l,cadre=1, affichage=1)
+    graph1.ProcessingGene(pas=1 , fact_echelle= l,cadre=0, affichage=0)
     h = graph1.dim_reel_y #selon y
     print(h)
     
