@@ -351,17 +351,31 @@ class Graph2:
                 
         self.lst_tot = [new_listx, new_listy, self.lst_tot[2]]
         
+        
+        
+    def traj_d2r(self, fact_echelle = 10*(10**-2)): #fact_echelle == longueur en x de l'image réelle
+        
+        dim_px = fact_echelle / max(self.lst_tot[0])
+        
+        #calcul de la longeur de l'image en y
+        self.dim_reel_y = dim_px*max(self.lst_tot[1])    #On multiplie la dimention d'un px avec la 'taille' 
+        
+        for i in range(len(self.lst_tot)):
+            for j in range(len(self.lst_tot[i])):
+                self.lst_tot_reel[i].append( self.lst_tot[i][j] * dim_px)
+        
     
     #Affichage final
     def Affiche_Final(self):
         plt.plot(self.lst_tot[0],self.lst_tot[1])
         plt.show()
     
-    def ProcessingGene(self, pas = 1, affichage = 0):
+    def ProcessingGene(self, pas = 1, fact_echelle = 1,affichage = 0):
         self.find_ensembles()
         self.createAllEnsembles(pas)
         self.connectAllEnsemble()
         self.RotationRep()
+        self.traj_d2r(fact_echelle)
         
         if affichage == 1:
             self.Affiche_Final()
