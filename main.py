@@ -94,8 +94,8 @@ class TrajectoryPublisher(Node):
     def timer_callback(self):
         L = len(self.lst_point[0])
         
-        top_position_z = -0.2
-        bottom_position_z = -0.5
+        top_position_z = 0.2
+        bottom_position_z = 0.5
         msg = JointTrajectory()
         
         msg.header.stamp = self.get_clock().now().to_msg()
