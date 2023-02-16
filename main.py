@@ -75,7 +75,7 @@ class TrajectoryPublisher(Node):
     def __init__(self,lst_point,origin,a1,a2, coude):
         super().__init__('trajectory_publisher')
         self.publisher_ = self.create_publisher(JointTrajectory, '/scara_trajectory_controller/joint_trajectory', 10)
-        self.period = 0.1
+        self.period = 0.05
         self.timer_period = self.period # seconds
         self.timer = self.create_timer(self.timer_period, self.timer_callback)
         self.i = 0
@@ -254,14 +254,19 @@ def main(args=None):
     beta_min = -(115/180)*np.pi  # - 95 degres en radian 
     
     #déclaration de l'élément graph de la classe graph
-    graph1 = Graph2("TPS.png")
-    l = 0.6#selon x
-    graph1.ProcessingGene(pas=1 , fact_echelle= l,cadre=0, affichage=0)
-    h = graph1.dim_reel_y #selon y
-    print(h)
+    l = 1.0#selon x
+    graph1 = graph("TTT.png")
+    graph1.image2coord(pas=1 , fact_echelle= l)
+    origin = [-0.5, 0.9]
+    h=graph1.dim_reel_y
+    
+    #l = 0.6
+    #graph1 = Graph2("TPS.png")
+    #graph1.ProcessingGene(pas=1 , fact_echelle= l,cadre=1, affichage=0)
+    #origin = [-0.3, 0.9]
+    #h=graph1.dim_reel_y
     
     #vérification que l'image rentre dans la zone de travails 
-    origin = [-0.3, 0.9]
     pt_b_l = origin
     pt_b_r = [origin[0]+l,origin[1]]
     pt_t_r = [origin[0]+ l,origin[1] + h]
