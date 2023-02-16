@@ -21,7 +21,26 @@ def inv_x_y(lst):
         var = lst[i][0]
         lst[i][0] = lst[i][1]
         lst[i][1] = var
-
+        
+def lst_num(pt1,pt2,pas):
+        
+        res = [ [], [], []]
+        
+        D = sqrt((pt1[0] - pt2[0])**2 + 
+                 (pt1[1] - pt2[1])**2 )
+                    
+        for k in range(int(D//pas)):
+            
+            xk = pt1[0] + k*pas*( ( pt2[0] - pt1[0] ) / D )
+            yk = pt1[1] + k*pas*( ( pt2[1] - pt1[1] ) / D )
+            zk = 0
+            
+            res[0].append(int(xk))
+            res[1].append(int(yk))
+            res[2].append(int(zk))
+            
+        return res
+        
 
 class Ensemble:
     
@@ -319,68 +338,36 @@ class Graph2:
                 
         self.lst_tot = [new_listx, new_listy, self.lst_tot[2]]
         
+        
+    
+        
+    
     def ajout_cadre(self):
         
-        Xmin = 0
-        Xmax = len(self.lst_tot[0])
-        Ymin = 0
-        Ymax = len(self.lst_tot[1])
+        Xmin = int(min(self.lst_tot[0]))
+        Xmax = int(max(self.lst_tot[0]))
+        Ymin = int(min(self.lst_tot[1]))
+        Ymax = int(max(self.lst_tot[1]))
         
-        #Ajout du chemin pour le prochain ensemble
-        pt1 = self.lst_ensembles[-1].last_pt
-        pt2 = [Xmin , Ymin]
+        pt1 = [Xmin,Ymin]
+        pt2 = [Xmax,Ymin]
+        pt3 = [Xmax,Ymax]
+        pt4 = [Xmin,Ymax]
         
-        #Distance entre les 2 points
-        D = sqrt((pt1[0] - pt2[0])**2 + 
-                    (pt1[1] - pt2[1])**2 )
-            
-        for k in range(int(D//self.pas_graph)):
-            
-            xk = pt1[0] + k*self.pas_graph*( ( pt2[0] - pt1[0] ) / D )
-            yk = pt1[1] + k*self.pas_graph*( ( pt2[1] - pt1[1] ) / D )
-            zk = 1
-            
-            self.lst_tot[0].append(int(xk))
-            self.lst_tot[1].append(int(yk))
-            self.lst_tot[2].append(int(zk))
+        lst1 = lst_num(pt1,pt2,self.pas_graph)
+        lst2 = lst_num(pt2,pt3,self.pas_graph)
+        lst3 = lst_num(pt3,pt4,self.pas_graph)
+        lst4 = lst_num(pt4,pt1,self.pas_graph)
         
-        #On trace le contour
-        #1 bas [Xmin, Ymin] --> [Xmax, Ymin]
-        X1 = np.arange(Xmin, Xmax, self.pas_graph)
-        Y1 = [Ymin]*Ymax
+        lst = [lst1,lst2,lst3,lst4]
         
-        for i in range(len(X1)):
-            self.lst_tot[0].append(X1[i])
-            self.lst_tot[1].append(Y1[i])
-            self.lst_tot[2].append(0)
-            
-        #2 droite [Xmax, Ymin]-->[Xmax, Ymax]
-        X2 = [Xmax]*Xmax
-        Y2 = np.arange(Ymin, Ymax, self.pas_graph)
-        
-        for i in range(len(X2)):
-            self.lst_tot[0].append(X2[i])
-            self.lst_tot[1].append(Y2[i])
-            self.lst_tot[2].append(0)
-        
-        #3haut gauche [Xmax, Ymax] --> [Xmin, Ymax]
-        X3 = np.arange(Xmax, Xmin, self.pas_graph)
-        Y3 = [Ymax]*Xmax
-        
-        for i in range(len(X3)):
-            self.lst_tot[0].append(X3[i])
-            self.lst_tot[1].append(Y3[i])
-            self.lst_tot[2].append(0)
-        
-        #4[Xmin, Ymax] --> [Xmin, Ymin]
-        X4 = [[Xmin]*Xmax]
-        Y4 = np.arange(Ymax, Ymin, self.pas_graph)
-        
-        for i in range(len(X4)):
-            self.lst_tot[0].append(X4[i])
-            self.lst_tot[1].append(Y4[i])
-            self.lst_tot[2].append(0)
-        
+        for i in range(len(lst)):
+            for j in range(len(lst[0])):
+                for k in range(len(lst[0][0])):
+                    self.lst_tot[j].append(lst[i][j][k])
+    
+    
+    
     def traj_d2r(self, fact_echelle = 10*(10**-2)): #fact_echelle == longueur en x de l'image réelle
         
         dim_px = fact_echelle / max(self.lst_tot[0])
