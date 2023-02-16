@@ -95,7 +95,7 @@ class TrajectoryPublisher(Node):
         L = len(self.lst_point[0])
         
         top_position_z = 0.2
-        bottom_position_z = 0.5
+        bottom_position_z = 0.4
         msg = JointTrajectory()
         
         msg.header.stamp = self.get_clock().now().to_msg()
@@ -243,8 +243,8 @@ class TrajectoryPublisher(Node):
 
 def main(args=None):
     #paramètres du robot
-    a1 = 0.8  #en m voir le ficheir URDF dans scara_tutorial_ros2/scara_description/urdf
-    a2 = 0.8  #en m voir le ficheir URDF dans scara_tutorial_ros2/scara_description/urdf
+    a1 = 0.425 #en m voir le ficheir URDF dans scara_tutorial_ros2/scara_description/urdf
+    a2 = 0.345  #en m voir le ficheir URDF dans scara_tutorial_ros2/scara_description/urdf
     
     coude = 1
     
