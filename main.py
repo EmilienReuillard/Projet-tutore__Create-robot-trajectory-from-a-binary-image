@@ -253,13 +253,17 @@ def main(args=None):
     beta_max = (115/180)*np.pi   # 95 degres en radian 
     beta_min = -(115/180)*np.pi  # - 95 degres en radian 
     
-    #déclaration de l'élément graph de la classe graph
+    #Partie à utiliser pour former des dessins avec des coins (exemple des lettres)
+    # ---------------------------------------------
     l = 1.2#selon x
     graph1 = graph("TTT.png")
     graph1.image2coord(pas=1 , fact_echelle= l)
     origin = [-0.6, 0.9]
     h=graph1.dim_reel_y
+    #---------------------------------------------
     
+    #Partie à utiliser pour former des dessins avec des formes arrondis (exemple logo de TPS) 
+    #---------------------------------------------    
     """
     l = 0.6
     graph1 = Graph2("TPS.png")
@@ -267,6 +271,8 @@ def main(args=None):
     origin = [-0.3, 0.9]
     h=graph1.dim_reel_y
     """
+    #---------------------------------------------
+
     #vérification que l'image rentre dans la zone de travails 
     pt_b_l = origin
     pt_b_r = [origin[0]+l,origin[1]]
@@ -283,8 +289,6 @@ def main(args=None):
         #graph1.affichage()
         #vérification que l'image rentre deq
         
-        
-        #lst = graph1.lst_tot_reel    #lst contient les coordonées xyz
         lst = graph1.trajectory_pts_reel #lst contient les coordonées xyz
         #initialisation du node ros
         rclpy.init(args=args)
