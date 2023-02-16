@@ -85,11 +85,8 @@ class TrajectoryPublisher(Node):
         self.coude = coude
         self.a1 = a1
         self.a2 = a2
-        print("test1")
     
     def timer_callback(self):
-        
-        
         L = len(self.lst_point[0])
         
         top_position_z = 0.02
@@ -141,7 +138,6 @@ class TrajectoryPublisher(Node):
                 print("passage de la position haute à le position basse")
                 self.timer_period = self.period
                 self.z_move = True
-                self.time_z_move = 3
                 point.time_from_start.sec = self.time_z_move
                 self.new_z = bottom_position_z
                 
@@ -190,7 +186,6 @@ class TrajectoryPublisher(Node):
             print("aller au premier point")
     
             self.z_move = True
-            self.time_z_move = 3
             point.time_from_start.sec = self.time_z_move
             self.new_z = top_position_z
 
