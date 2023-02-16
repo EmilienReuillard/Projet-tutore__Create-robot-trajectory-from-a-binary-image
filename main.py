@@ -255,10 +255,10 @@ def main(args=None):
     
     #Partie à utiliser pour former des dessins avec des coins (exemple des lettres)
     # ---------------------------------------------
-    l = 0.7#selon x
+    l = 0.8#selon x
     graph1 = graph("./images/TT.png")
     graph1.image2coord(pas=1 , fact_echelle= l)
-    origin = [-0.3, 0.5]
+    origin = [-0.4, 0.3]
     h=graph1.dim_reel_y
     #---------------------------------------------
     
