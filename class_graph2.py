@@ -15,17 +15,6 @@ import scipy
 from math import*
 import skimage.color as color
 
-
-#Fonction pour tracer un cercle
-def Circle(r, cx = 0, cy = 0, echantillonage = 2000):
-    theta = np.linspace(0, 2*np.pi, echantillonage)
-
-    x1 = r*np.cos(theta) + cx
-    x2 = r*np.sin(theta) + cy
-    res = [x1,x2] #Passage en int parce que c'est des pixels
-    
-    return res
-
 def inv_x_y(lst):
     L = len(lst) 
     for i in range(L):
@@ -115,7 +104,6 @@ class Ensemble:
             
             Dist = sqrt((self.lst_detect[pt1][0] - self.lst_detect[pt2][0])**2 + 
                         (self.lst_detect[pt1][1] - self.lst_detect[pt2][1])**2 )
-            #print(f"N = {pt2} ; D = {Dist}")
             
             if ((Dist <= Dist_min) and (pt1 != pt2) and (pt2 not in self.used_points)):
                 pt_le_plus_proche = pt2
@@ -145,16 +133,12 @@ class Ensemble:
         
         #on va maintenan aller de point le plus proche en point le plus proche
         compt = 0
-        
-        #print(f"########################################")
-        #print(f"N = {self.N_ensemble}")
-        #print(f"########################################")
+
         
         for i in range(self.N_detect - 1):
             
             
             ind_new_pt, D = self.point_le_plus_proche(self.lst_trajectory[compt][3])  #on trouve l'indice du point le plus proche
-            #print(f"D = {D} ; N = {compt}")
             
             if D < 50: 
                 self.used_points.append(ind_new_pt)
@@ -183,7 +167,6 @@ class Ensemble:
             
             if D > 10*self.pas:
                 
-                #print(f"i = {i} ; D = {D}\npt1 = {pt1} \n")
                 n_pt_aj = 0 #nombre de points ajoutés
                 for k in range(int(D//self.pas)):
                     
@@ -191,22 +174,11 @@ class Ensemble:
                     yk = pt1[1] + k*self.pas*( ( pt2[1] - pt1[1] ) / D )
                     
                     var = [int(xk), int(yk) , 0]
-                    #print(var)
                     self.lst_trajectory.insert(i+k+1, var)
                     n_pt_aj += 1
                 
-                #print(f"\npt2 = {pt2} \n")
-                
-                #Affichage de la suite de la liste
-                #print("Suite de la liste")
-                #for j in range(i + n_pt_aj, compt):
-                #    print(self.lst_trajectory[j])
                 
         self.last_pt = self.lst_trajectory[-1]    #dernier point a avoir été tracé
-        
-        #print(f"First pt = {self.first_pt}")
-        #print(f"Last pt  = {self.last_pt}\n")
-        #print(self.lst_trajectory)
             
     #Synthèse de toutes les fonctions précédentes
     def mapping_process(self, pas=1):
