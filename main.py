@@ -255,11 +255,12 @@ def main(args=None):
     
     #Partie à utiliser pour former des dessins avec des coins (exemple des lettres)
     # ---------------------------------------------
-    l = 0.8#selon x
+    l = 0.4#selon x
     graph1 = graph("./images/TT.png")
     graph1.image2coord(pas=1 , fact_echelle= l)
-    origin = [-0.4, 0.3]
+    origin = [-0.4, 0.6]
     h=graph1.dim_reel_y
+    print(h)
     #---------------------------------------------
     
     #Partie à utiliser pour former des dessins avec des formes arrondis (exemple logo de TPS) 
