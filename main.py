@@ -251,13 +251,13 @@ def main(args=None):
     
     #déclaration de l'élément graph de la classe graph
     graph1 = Graph2("TPS.png")
-    l = 1#selon x
-    graph1.ProcessingGene(pas=1 , fact_echelle= l,affichage=1)
+    l = 0.2#selon x
+    graph1.ProcessingGene(pas=1 , fact_echelle= l)
     h = graph1.dim_reel_y #selon y
     print(h)
     
     #vérification que l'image rentre dans la zone de travails 
-    origin = [-0.5, 1.0]
+    origin = [-0.15, 1.3]
     pt_b_l = origin
     pt_b_r = [origin[0]+l,origin[1]]
     pt_t_r = [origin[0]+ l,origin[1] + h]
