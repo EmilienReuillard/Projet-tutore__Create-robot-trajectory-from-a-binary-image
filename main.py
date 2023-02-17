@@ -75,7 +75,7 @@ class TrajectoryPublisher(Node):
     def __init__(self,lst_point,origin,a1,a2, coude):
         super().__init__('trajectory_publisher')
         self.publisher_ = self.create_publisher(JointTrajectory, '/scara_trajectory_controller/joint_trajectory', 10)
-        self.period = 0.1
+        self.period = 0.05
         self.timer_period = self.period # seconds
         self.timer = self.create_timer(self.timer_period, self.timer_callback)
         self.i = 0
@@ -209,7 +209,7 @@ class TrajectoryPublisher(Node):
                 return
             
             alpha, beta = float(val[0]), float(val[1])
-            
+            alpha, beta = 0.0,0.0
             #passage de la position haute à le position basse. 
             print("aller au premier point")
     
@@ -253,15 +253,27 @@ def main(args=None):
     beta_max = (115/180)*np.pi   # 95 degres en radian 
     beta_min = -(115/180)*np.pi  # - 95 degres en radian 
     
-    #déclaration de l'élément graph de la classe graph
-    graph1 = Graph2("TPS.png")
-    l = 0.6#selon x
-    graph1.ProcessingGene(pas=1 , fact_echelle= l,cadre=0, affichage=0)
-    h = graph1.dim_reel_y #selon y
-    print(h)
+    #Partie à utiliser pour former des dessins avec des coins (exemple des lettres)
+    # ---------------------------------------------
+    l = 1.2#selon x
+    graph1 = graph("./images/TTT.png")
+    graph1.image2coord(pas=1 , fact_echelle= l)
+    origin = [-0.6, 0.9]
+    h=graph1.dim_reel_y
+    #---------------------------------------------
     
-    #vérification que l'image rentre dans la zone de travails 
+    #Partie à utiliser pour former des dessins avec des formes arrondis (exemple logo de TPS) 
+    #---------------------------------------------    
+    """
+    l = 0.6
+    graph1 = Graph2("./images/TPS.png")
+    graph1.ProcessingGene(pas=1 , fact_echelle= l,cadre=1, affichage=0)
     origin = [-0.3, 0.9]
+    h=graph1.dim_reel_y
+    """
+    #---------------------------------------------
+
+    #vérification que l'image rentre dans la zone de travails 
     pt_b_l = origin
     pt_b_r = [origin[0]+l,origin[1]]
     pt_t_r = [origin[0]+ l,origin[1] + h]
@@ -277,9 +289,7 @@ def main(args=None):
         #graph1.affichage()
         #vérification que l'image rentre deq
         
-        
-        lst = graph1.lst_tot_reel    #lst contient les coordonées xyz
-        
+        lst = graph1.trajectory_pts_reel #lst contient les coordonées xyz
         #initialisation du node ros
         rclpy.init(args=args)
         point_publisher = TrajectoryPublisher(lst,origin=origin,a1=a1,a2=a2, coude=coude)
