@@ -257,6 +257,9 @@ class Graph2:
         self.Lx = len(self.image_rgb)
         self.Ly = len(self.image_rgb[0])
         
+        #Affichage
+        self.affiche_imgs
+        
     #on isole une seul région n°"indice_region" en créant une nouvelle image
     #Cette image sera utilisée par la suite pour faire des traitements
     def new_image_from_single_ensemble(self, indice_region):
