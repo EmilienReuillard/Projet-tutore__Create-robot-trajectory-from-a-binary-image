@@ -295,7 +295,7 @@ class Graph2:
             E.mapping_process(pas)
             self.lst_ensembles.append(E)
             
-            #self.lst_ensembles[i].affiche_X_Y()
+            self.lst_ensembles[i].affiche_X_Y()
         
     def connectAllEnsemble(self):
         
