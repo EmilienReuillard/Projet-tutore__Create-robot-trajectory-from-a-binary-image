@@ -57,5 +57,11 @@ source ros2_ws/install/setup.bash
 ros2 topic echo /scara_trajectory_controller/joint_trajectory
 ```
 
-### Process description 
+### Description of the process
+
+This is how it works : 
+ - This size of the image wanted is supplied and then the image processing supplied a list with the coordinate x, y and z matching with the shape present on the image. This list is named *trajectory_pts_reel* and can be called with OBJ.trajectory_pts_reel as say above. 
+ - A verification step say if the size of the image can enter in the robot's workspace. 
+ - The ros node is created and the trajectory messages (joint positions) are sent with a prior conversion of the Cartesian coordinates into joint coordinates.
+ - When the list is finished then the ros node is deleted. 
 
