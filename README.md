@@ -65,3 +65,49 @@ This is how it works :
  - The ros node is created and the trajectory messages (joint positions) are sent with a prior conversion of the Cartesian coordinates into joint coordinates.
  - When the list is finished then the ros node is deleted. 
 
+### Description step by step
+
+The function main is the function carried out at the start of the programme.
+Fist, the features of the robot are describe with this lines : 
+
+```python
+a1 = 0.8  
+a2 = 0.8      
+coude = 1  
+alpha_max = (85/180)*np.pi  #radian 
+alpha_min = -(85/180)*np.pi #radian 
+beta_max = (115/180)*np.pi   #radian 
+beta_min = -(115/180)*np.pi  #radian 
+```
+a1 and a2 correspond to the size of each arm. In addition coude mean if we want to use the robot with elbow to the right (coude=1) or elbow to the left (coude =-1). Finaly the robot is dimentioned with maximum and minimum angles. 
+
+The drawing process is initialized with the class graph for drawings with corner. (example letter)
+
+```python
+graph1 = graph("./images/TTT.png")
+```
+Or, the drawing process is initialized with the class Graph2 for drawings with rounded shapes. (example Telecom Physique Strasbourg icon)
+
+```python
+graph1 = Graph2("./images/TPS.png")
+```
+After, it is possible to choose the size of the image that we want to draw with the robot : the variable l mean the length and then the the height is proportional (return with *GRAPH.dim_reel_y*.
+For drawings with corner : 
+```python
+l = 1.2
+graph1.image2coord(pas=1 , fact_echelle= l)
+```
+For drawings with rounded shapes : 
+```python
+l = 0.6
+graph1.ProcessingGene(pas=1 , fact_echelle= l,cadre=1, affichage=0)
+```
+This process is needed to have the two dimensions of the image. 
+
+After do that we use the function *is_in_workspace* which check is all the corner of the image can be drawn by the robot. Indeed we can draw the drawing anywhere possible in the robot workspace thanks to *origin* which is the bottom left corner of the image drawn.
+
+If the size of the image correspond to the robot correpond to the robot workspace then we can get the list of point like that : 
+
+```python
+lst = graph1.trajectory_pts_reel
+```
