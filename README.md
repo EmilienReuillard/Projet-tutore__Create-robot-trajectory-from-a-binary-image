@@ -120,7 +120,7 @@ point_publisher = TrajectoryPublisher(lst,origin=origin,a1=a1,a2=a2, coude=coude
 rclpy.spin(point_publisher)
 ```
 Now it is interresting to see what is going on in the class TrajectoryPublisher.
-In the __init__ function, the publisher is created and correspond to a message such as **JointTrajectory** and published to the topic *'/scara_trajectory_controller/joint_trajectory'*. This type of message is decribed here : [JointTrajectory](http://docs.ros.org/en/melodic/api/trajectory_msgs/html/msg/JointTrajectory.html)
+In the __init__ function, the publisher is created and correspond to a message such as **JointTrajectory** and published to the topic *'/scara_trajectory_controller/joint_trajectory'*. This type of message is decribed here : [JointTrajectory.](http://docs.ros.org/en/melodic/api/trajectory_msgs/html/msg/JointTrajectory.html)
 A few variables are defined as the frequency of sending the message : 
 ```python 
 self.period = 0.05
