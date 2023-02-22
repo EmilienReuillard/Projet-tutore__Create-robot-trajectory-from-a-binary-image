@@ -111,3 +111,66 @@ If the size of the image correspond to the robot correpond to the robot workspac
 ```python
 lst = graph1.trajectory_pts_reel
 ```
+As say above, this list come from the image processing and contains Cartesian coordinate information. And now it is interresting to send them to the robot. A Ros node have to be create and a the message have to be send in a topic. 
+
+This 3 lines allow to init the node, then create it and after execute the timer callback link to the node. 
+```python
+rclpy.init(args=args)
+point_publisher = TrajectoryPublisher(lst,origin=origin,a1=a1,a2=a2, coude=coude)       
+rclpy.spin(point_publisher)
+```
+Now it is interresting to see what is going on in the class TrajectoryPublisher.
+In the __init__ function, the publisher is created and correspond to a message such as **JointTrajectory** and published to the topic *'/scara_trajectory_controller/joint_trajectory'*. This type of message is decribed here : ...[JointTrajectory](http://docs.ros.org/en/melodic/api/trajectory_msgs/html/msg/JointTrajectory.html)... 
+A few variables are defined as the frequency of sending the message : 
+```python 
+self.period = 0.05
+```
+This variable is important and allow to increase/decrease the speed of the robot as described after. 
+Then according to this frequency the function *timer_callback* will be executed : 
+```python
+self.timer = self.create_timer(self.timer_period, self.timer_callback)
+```
+In this function the message is initialised : 
+```python
+msg = JointTrajectory()
+```
+For us 3 joint are defined :
+```python
+msg.joint_names = ['joint1','joint2','joint3']
+```
+And the list for the point is also initalised
+```python
+msg.points = []
+point = JointTrajectoryPoint()
+```
+Thus at this stage we do not initialise any more than *msg* because we only want to transmit in the message the joint coordinates as well as the time between the initialized position before the message and the desired position and not the forces or accelerations to be applied. The robot controller takes care of this.
+
+The end of this function is divised in 3 similar parts. The first part concerns the first item in the list, the second part concerns all the other items except the last one and the last part concerns the last item. 
+
+For the first point the robot lift the pencil to the first point (be carefull because the top poisition for the Rviz siluation and for the real robot is not the same). And for the end the robot lift the pencil when the drawing is finished. 
+
+Between this two parts (*self.i<L) the message is send accordig to the list of point. When the z is equal to 0 then the pencil should be on the paper. An other part important is he transition between the top position and the bottom position or the reverse. Indeed in this situation the time (**point.time_from_start**) between this two point is increased (equal to *self.time_z_move*) unlike the plotting moments where this time is equal to the period of sending the message. Thus to respect *self.time_z_move* a wait period should be done. (define by *self.z_move*) 
+
+For each point : 
+ - The cartesian coordinate is collected: 
+ ```python
+x = float(self.lst_point[0][self.i])
+y = float(self.lst_point[1][self.i])
+z = float(self.lst_point[2][self.i])
+ ```
+ - the points change reference points from the image reference point to the robot reference point according to the *origin*: 
+ ```python 
+ x,y = repere_change(x,y,self.origin)
+ ```
+ - And then the Cartesian coordinates are converted into joint coordinates using the inverse geometric model of the robot: 
+ ```python
+val = coord_articulaire(x,y,a1=self.a1,a2=self.a2,coude=self.coude)             
+alpha, beta = float(val[0]), float(val[1])
+ ```
+ - Finaly the z is adjusted and the message is published: 
+ ```python
+ point.positions = [self.new_z,alpha,beta]
+ msg.points.append(point)
+ self.publisher_.publish(msg)
+ ```
+To conclude this message hold a set of joint coordinates corresponding to a unique point. A new message is therefore published on the topic for each point created by the image processing. We could have published all the trajectories at once with a message including all sets of joint coordinates but this did not work. 
