@@ -25,6 +25,39 @@ The image processing : OBJ.ProcessingGene(pas=1 , fact_echelle = 0.1 , cadre=1, 
 
 These points are avaible in the liste named *lst_tot*. You can use it whith OBJ.lst_tot for example.
 
+#### Detail of the *Class_graph2* process
+
+1 - The Init :
+
+The image is saved, the canny image is created and the blurred image too. All this elements are in an object defined, for the rest, it will be called OBJ.
+
+2 - find_ensembles : 
+
+This function used the label function. It allow to enumerate separate parts in the image. All this parts are stocked in the variable *self.props*.
+With this list, it is possible make a processing only on one part of the image.
+
+3 - createAllEnsembles :
+
+For each region of the image, the trajectory is processessed. It return X,Y,Z coord.
+To process this trajectory with *ProcessingGene*, this is what is done in a nutshell :
+
+mapping_process :
+ - The coords of all the white pixels are memorized in a list (rech_pt_cadrillage)
+ - The detected points needs to to be replace in the right place. Then a research of the closesest point is made. And point after point, we found the next one whith the minimum. When a point is replaced, it cannot be chosen to be the next one. 
+
+createAllEnsembles :
+The previous function is used on each Ensemble detected in the image.
+
+connectAllEnsemble : 
+This function connect all the trajectory points maded by the previous function. All the trajetory are syntetised in an only one and intermediate way were created to link the differents Ensembles.
+
+RotationRep :
+Rotate the coords and place the origin of the axis in the down left corner.
+
+Other :
+ - It is possible to add one frame on the image (cadre = 0/1)
+ - Show the result (affichage = 0/1)
+
 ## How move the scara robot. 
 
 ### Installation and launch
