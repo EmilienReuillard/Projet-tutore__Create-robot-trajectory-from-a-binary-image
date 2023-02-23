@@ -121,8 +121,9 @@ class TrajectoryPublisher(Node):
         
         #First point in the list 
         if (self.i == 0):
+            #The goal is to put the pencil above the firt point. 
             
-            #collect the informations (cartesian point) from the list
+            #Collect the informations (cartesian point) from the list
             x = float(self.lst_point[0][self.i])
             y = float(self.lst_point[1][self.i])
             z = float(self.lst_point[2][self.i])
@@ -137,11 +138,11 @@ class TrajectoryPublisher(Node):
             y = round(y,3)
             z = round(z,3)
             
-            #get the coordinate values according to the point x,y
+            #get the angular values according to the point x,y
             val = coord_articulaire(x,y,a1=self.a1,a2=self.a2,coude=self.coude)
 
             if (val == False):
-                    #position inateignalbe, pas dans l'espace de travails 
+                    #unaligned position, not in the workspace 
                     return
 
             alpha, beta = float(val[0]), float(val[1])
@@ -155,12 +156,14 @@ class TrajectoryPublisher(Node):
             self.new_z = top_position_z
             
         elif (self.i < L): 
+            #part for the drawing
             
-            
+            #Collect the informations (cartesian point) from the list
             x = float(self.lst_point[0][self.i])
             y = float(self.lst_point[1][self.i])
             z = float(self.lst_point[2][self.i])
-                
+            
+            #change the point mark
             x,y = repere_change(x,y,self.origin)
             x,y = repere_change_dxl(x,y)
                 
@@ -169,56 +172,61 @@ class TrajectoryPublisher(Node):
             x = round(x,3)
             y = round(y,3)
             z = round(z,3)           
-                      
+            
+            #get the angular values according to the point x,y
             val = coord_articulaire(x,y,a1=self.a1,a2=self.a2,coude=self.coude)
                 
             if (val == False):
-                    #position inateignalbe, pas dans l'espace de travails 
+                    #unaligned position, not in the workspace 
                     return
                 
             alpha, beta = float(val[0]), float(val[1])
-                
+            
+            #depending on whether the pencil is raised or not, we assign self.new_z and the time to reach it 
             
             if (z==0.0 and self.z_before!=0.0):
-                #passage de la position haute à le position basse. 
-                print("passage de la position haute à le position basse")
+                #Switching from high to low position. 
+                print("Switching from high to low position")
                 self.z_move = True
                 self.new_z = bottom_position_z
                 point.time_from_start.sec = self.time_z_move
                 
             elif(z!=0.0 and self.z_before==0.0):
-                #passage de la position basse à la position haute.
-                print("passage de la position haute à le position basse") 
+                #Switching from low to high position.
+                print("Switching from low to high position") 
                 self.z_move = True
                 self.new_z = top_position_z
                 point.time_from_start.sec = self.time_z_move
                 
             elif(z==0.0):
-                #position basse 
-                print("position basse ") 
+                #low position
+                print("low position") 
                 self.z_move = False
                 self.new_z=bottom_position_z
                 self.timer_period = self.period
                 point.time_from_start.nanosec = int(self.timer_period * 1e9)
                 
             elif(z!=0.0):
-                #position haute
-                print("position haute")
+                #high position
+                print("high position")
                 self.z_move = False
                 self.new_z=top_position_z
                 self.timer_period = self.period
                 point.time_from_start.nanosec = int(self.timer_period * 1e9)
                 
         elif(self.i == L):
-            #fin du tracé, on met le crayon en haut
+            #end of the drawing, pu the pencil to the top position
             
+            #Collect the informations (cartesian point) from the last point
             x = self.x_before
             y = self.y_before
             z = top_position_z
             
+            #change the point mark
             x,y = repere_change(x,y,self.origin)
             x,y = repere_change_dxl(x,y)
             
+            #get the angular values according to the point x,y
             val = coord_articulaire(x,y,a1=self.a1,a2=self.a2,coude=self.coude)
             
             if (val == False):
@@ -226,18 +234,16 @@ class TrajectoryPublisher(Node):
                 return
             
             alpha, beta = float(val[0]), float(val[1])
-            alpha, beta = 0.0,0.0
-            #passage de la position haute à le position basse. 
-            print("aller au premier point")
     
             self.z_move = True
             point.time_from_start.sec = self.time_z_move
             self.new_z = top_position_z
 
         else : 
-            print(" Fin du tracé ")
+            print(" End of drawings ")
             exit() 
         
+        #we complete the message to be sent 
         point.positions = [self.new_z,alpha,beta]
             
         print(f"x = {x} ; y = {y} ; z = {self.new_z}") 
@@ -254,23 +260,24 @@ class TrajectoryPublisher(Node):
         
         self.i += 1     
         
+        #time to wait if the z move
         if self.z_move:
                 time.sleep(self.time_z_move)     
         
 
 def main(args=None):
-    #paramètres du robot
-    a1 = 0.8  #en m voir le ficheir URDF dans scara_tutorial_ros2/scara_description/urdf
-    a2 = 0.8  #en m voir le ficheir URDF dans scara_tutorial_ros2/scara_description/urdf
+    #robot features
+    a1 = 0.8  #en meter see the URDF file in scara_tutorial_ros2/scara_description/urdf 
+    a2 = 0.8  #en meter see the URDF file in scara_tutorial_ros2/scara_description/urdf 
     
     coude = 1
     
-    alpha_max = (85/180)*np.pi  # 85 degres en radian 
-    alpha_min = -(85/180)*np.pi # -85 degres en radian 
-    beta_max = (115/180)*np.pi   # 95 degres en radian 
-    beta_min = -(115/180)*np.pi  # - 95 degres en radian 
+    alpha_max = (85/180)*np.pi  # 85 degrees in radian 
+    alpha_min = -(85/180)*np.pi # -85 degrees in radian 
+    beta_max = (115/180)*np.pi   # 115 degrees in radian 
+    beta_min = -(115/180)*np.pi  # -115 degrees in radian 
     
-    #Partie à utiliser pour former des dessins avec des coins (exemple des lettres)
+    #Part to be used to form designs with corners (e.g. letters)
     # ---------------------------------------------
     l = 1.2#selon x
     graph1 = graph("./images/TTT.png")
@@ -279,7 +286,7 @@ def main(args=None):
     h=graph1.dim_reel_y
     #---------------------------------------------
     
-    #Partie à utiliser pour former des dessins avec des formes arrondis (exemple logo de TPS) 
+    #Part to be used to form drawings with rounded shapes (example TPS icon) 
     #---------------------------------------------    
     """
     l = 0.6
@@ -290,7 +297,7 @@ def main(args=None):
     """
     #---------------------------------------------
 
-    #vérification que l'image rentre dans la zone de travails 
+    #check that the image fits into the working area (4 corners) 
     pt_b_l = origin
     pt_b_r = [origin[0]+l,origin[1]]
     pt_t_r = [origin[0]+ l,origin[1] + h]
@@ -303,16 +310,12 @@ def main(args=None):
    
     if (test_b_l == True and test_t_r == True and test_t_l==True and test_b_r==True):
         print("Image OK")
-        #graph1.affichage()
-        #vérification que l'image rentre deq
         
-        lst = graph1.trajectory_pts_reel #lst contient les coordonées xyz
-        #initialisation du node ros
+        lst = graph1.trajectory_pts_reel #lst contains the xyz coordinatesfor the drawing 
+        #Ros Node initialisation and launch
         rclpy.init(args=args)
         point_publisher = TrajectoryPublisher(lst,origin=origin,a1=a1,a2=a2, coude=coude)
-        
         rclpy.spin(point_publisher)
-        #publishing
         point_publisher.destroy_node()
         rclpy.shutdown()
         
