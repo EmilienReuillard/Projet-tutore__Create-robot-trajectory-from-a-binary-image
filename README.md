@@ -69,7 +69,7 @@ After installing Ros2 Humble and the packages for the scara robot tutoral you ca
 If you want to use the real robot and not only the rviz model you have to check that : 
   - connect the robot with U2D2 to the computer. With dynamixel_Wizard application you have to check the USB port and the BaudRate
   - After that change this lines in the file scara_tutorial_ros2/scara_description/ros2_control/scara_dxl.ros2_control.urdf : 
-  ```
+  ```HTML
   <param name="usb_port">/dev/ttyUSB0</param>
   <param name="baud_rate">57600</param>
   <param name="use_dummy">true</param>
