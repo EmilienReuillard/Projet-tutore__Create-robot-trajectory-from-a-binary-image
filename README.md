@@ -66,6 +66,17 @@ The configuration of the robot comme from the github directory of ICube Robotics
 It is necessary to install all the packages need in this tutorial (1) from branch named **scara_dxl**. Everythings is describe. 
 
 After installing Ros2 Humble and the packages for the scara robot tutoral you can clone this github. Then go to the directory where the git is clone use this command to launch the robot on Rviz. Be sure to use the scara_dxl branch.
+If you want to use the real robot and not only the rviz model you have to check that : 
+  - connect the robot with U2D2 to the computer. With dynamixel_Wizard application you have to check the USB port and the BaudRate
+  - After that change this lines in the file scara_tutorial_ros2/scara_description/ros2_control/scara_dxl.ros2_control.urdf : 
+  ```
+  <param name="usb_port">/dev/ttyUSB0</param>
+  <param name="baud_rate">57600</param>
+  <param name="use_dummy">true</param>
+  ```
+  - Change the *usb_port* , change the *baud_rate* and put the *use_dummy* to false if you want to use the real robot connected (else true)
+
+Now you can lanch the robot. 
 
 ```bash
 source ros2_ws/install/setup.bash 
